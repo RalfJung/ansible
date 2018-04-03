@@ -1,0 +1,8 @@
+- hosts: all
+  tasks:
+  - name: system upgrade
+    apt:
+      autoremove: yes
+      autoclean: yes
+      update_cache: yes
+      upgrade: dist
