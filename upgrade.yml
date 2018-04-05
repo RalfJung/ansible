@@ -6,3 +6,5 @@
       autoclean: yes
       update_cache: yes
       upgrade: dist
+    environment:
+      NEEDRESTART_MODE: automatically

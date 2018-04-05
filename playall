@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+for HOST in $(fgrep 'all:' hosts | sed 's/.*all: *//g'); do
+  echo "Playing on $HOST"
+  ansible-playbook --diff -l "$HOST" "$@"
+  echo
+done

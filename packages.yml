@@ -1,0 +1,14 @@
+# basic system package preparation
+- hosts: all
+  tasks:
+  - name: detect if we have backports in the sources.list
+    command: fgrep backports /etc/apt/sources.list
+    ignore_errors: True
+    register: backports
+  - name: add backports repository
+    apt_repository: repo='deb http://httpredir.debian.org/debian {{ansible_distribution_release}}-backports main contrib non-free' state=present update_cache=yes
+    when: backports is failed
+  - name: get rid of packages we do not want
+    apt: name=exim4-base,rpcbind state=absent autoremove=yes
+  - name: install latest version of some packages, coming from backports if possible
+    apt: name=needrestart state=latest default_release={{ansible_distribution_release}}-backports
