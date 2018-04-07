@@ -1,0 +1,8 @@
+#!/bin/bash
+exists() {
+    [ -e "$1" ]
+}
+
+if exists /var/mail/*; then
+    echo "There is mail for some users in /var/mail!"
+fi

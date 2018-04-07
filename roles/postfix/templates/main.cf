@@ -1,0 +1,61 @@
+# local delivery: aliases only
+alias_maps = hash:/etc/aliases
+local_recipient_maps = $alias_maps
+# explicitly UNSET relay domains to prevent implicit domains
+relay_domains =
+# only consider ourselves local
+mynetworks_style = host
+{% if postfix.mynetworks is defined %}
+mynetworks = {{ postfix.mynetworks }}
+{% endif %}
+
+# TLS server parameters
+smtpd_tls_cert_file=/etc/ssl/mycerts/letsencrypt/live.crt+chain
+smtpd_tls_key_file=/etc/ssl/private/letsencrypt/live.key
+smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+smtpd_tls_security_level = may
+smtpd_tls_loglevel = 1
+smtpd_tls_dh1024_param_file = /etc/ssl/dh2048.pem
+smtpd_tls_mandatory_protocols = !SSLv2 !SSLv3
+smtpd_tls_ciphers = low
+smtpd_tls_mandatory_ciphers = high
+# TLS client parameters
+smtp_tls_mandatory_protocols = !SSLv2 !SSLv3
+smtp_tls_ciphers = low
+smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtp_tls_security_level = dane
+smtp_dns_support_level = dnssec
+smtp_tls_loglevel = 1
+
+# postscreen config
+postscreen_dnsbl_threshold = 3
+postscreen_dnsbl_whitelist_threshold = -2
+postscreen_dnsbl_sites =
+	ix.dnsbl.manitu.net*2 sbl-xbl.spamhaus.org*2
+	bl.spamcop.net dnsbl.sorbs.net bl.mailspike.net
+	swl.spamhaus.org*-2 list.dnswl.org=127.0.[0..255].[0..254]*-2
+postscreen_greet_action = enforce
+postscreen_dnsbl_action = enforce
+postscreen_pipelining_enable = yes
+postscreen_non_smtp_command_enable = yes
+postscreen_bare_newline_enable = yes
+# control relay access
+smtpd_relay_restrictions = permit_mynetworks, permit_tls_clientcerts,
+	# allow nobody else
+	defer_unauth_destination
+# spam-protection restrictions
+smtpd_helo_required = yes
+smtpd_recipient_restrictions = permit_mynetworks, permit_tls_clientcerts,
+	# check everybody else
+	reject_unauth_pipelining,
+        reject_invalid_helo_hostname,
+	reject_non_fqdn_recipient,
+	reject_non_fqdn_sender,
+
+# misc
+smtpd_delay_reject = yes
+disable_vrfy_command = yes
+recipient_delimiter = +
+delay_warning_time = 4h
+message_size_limit = 21384000
+append_dot_mydomain = no

@@ -1,0 +1,67 @@
+# In this file, patterns for journalwatch are defined to blacklist all journal
+# messages which are not errors.
+#
+# Lines starting with '#' are comments. Inline-comments are not permitted.
+#
+# The patterns are separated into blocks delimited by empty lines. Each block
+# matches on a log entry field, and the patterns in that block then are matched
+# against all messages with a matching log entry field.
+#
+# The syntax of a block looks like this:
+#
+# <field> = <value>
+# <pattern>
+# [<pattern>]
+# [...]
+#
+# If <value> starts and ends with a slash, it is interpreted as a regular
+# expression, if not, it's an exact match. Patterns are always regular
+# expressions.
+#
+# Below are some useful examples. If you have a small set of users, you might
+# want to adjust things like "user \w" to something like "user (root|foo|bar)".
+#
+# The regular expressions are extended Python regular expressions, for details
+# see:
+#
+# https://docs.python.org/3.4/library/re.html#regular-expression-syntax
+# https://docs.python.org/3.4/howto/regex.html
+# http://doc.pyschools.com/html/regex.html
+#
+# The journal fields are explained in systemd.journal-fields(7).
+
+_SYSTEMD_UNIT = systemd-logind.service
+New session [a-z]?\d+ of user \w+\.
+Removed session [a-z]?\d+\.
+
+SYSLOG_IDENTIFIER = /(CROND|crond)/
+pam_unix\(crond:session\): session (opened|closed) for user \w+
+\(\w+\) CMD .*
+
+SYSLOG_IDENTIFIER = systemd
+(Stopped|Stopping|Starting|Started) .*
+(Created slice|Removed slice) user-\d+\.slice\.
+Received SIGRTMIN\+24 from PID .*
+(Reached target|Stopped target) .*
+Startup finished in \d+ms\.
+
+_SYSTEMD_UNIT = init.scope
+user@\d+\.service: Killing process \d+ \(kill\) with signal SIGKILL\.
+
+SYSLOG_IDENTIFIER = sudo
+\s*[_\w.-]+ : TTY=(unknown|console|(pts/|ttyp?|vc/)\d+) ; PWD=[^;]+ ; USER=[._\w-]+ ; COMMAND=.*
+
+_SYSTEMD_UNIT = postfix@-.service
+warning: hostname [^\s]+ does not resolve to address [\da-fA-F.:]+(: Name or service not known)?
+warning: [._\w-]+\[[\da-fA-F.:]+\]: SASL LOGIN authentication failed: [._\w-]+
+warning: non-SMTP command from \w+\[[\da-fA-F.:]+\]: .*
+
+SYSLOG_IDENTIFIER = sshd
+error: Received disconnect from [\da-fA-F.:]+ port \d+:\d+: .*
+error: maximum authentication attempts exceeded for invalid user \w+ from [\da-fA-F.:]+ port \d+ ssh2( \[preauth\])?
+
+_SYSTEMD_UNIT = bind9.service
+client [\da-fA-F.:]+#\d+ \([\w.-]+\): (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type))
+
+_SYSTEMD_UNIT = opendkim.service
+[A-Z0-9]+: bad signature data

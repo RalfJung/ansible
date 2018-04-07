@@ -1,0 +1,15 @@
+# vim: ft=dosini
+#
+# This is the config for journalwatch. All options are defined in the [DEFAULT]
+# section.
+#
+# You can add any commandline argument to the config, without the '--'.
+# See  journalwatch --help for all arguments and their description.
+
+[DEFAULT]
+# priority 5: notice
+priority=5
+mail_from=root
+mail_to=root
+mail_subject={hostname}: {count} system events
+mail_binary=/usr/sbin/sendmail
