@@ -1,8 +1,6 @@
 # local delivery: aliases only
 alias_maps = hash:/etc/aliases
 local_recipient_maps = $alias_maps
-# explicitly UNSET relay domains to prevent implicit domains
-relay_domains =
 # only consider ourselves local
 mynetworks_style = host
 {% if postfix.mynetworks is defined %}
@@ -23,10 +21,24 @@ smtpd_tls_mandatory_ciphers = high
 smtp_tls_mandatory_protocols = !SSLv2 !SSLv3
 smtp_tls_ciphers = low
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+smtp_tls_loglevel = 1
+{% if not(postfix.relay_host is defined) %}
 smtp_tls_security_level = dane
 smtp_dns_support_level = dnssec
-smtp_tls_loglevel = 1
+{% endif %}
 
+{% if postfix.relay_host is defined %}
+# Relay everything
+default_transport = smtp:{{ postfix.relay_host }}
+{% if postfix.relay_client_cert is defined %}
+# Enforce relay encryption
+smtp_tls_cert_file=$config_directory/{{ postfix.relay_client_cert }}.crt
+smtp_tls_key_file=$config_directory/{{ postfix.relay_client_cert }}.key
+smtp_tls_security_level = encrypt
+{% endif %}
+{% endif %}
+
+{% if postfix.postscreen is defined and postfix.postscreen %}
 # postscreen config
 postscreen_dnsbl_threshold = 3
 postscreen_dnsbl_whitelist_threshold = -2
@@ -39,18 +51,20 @@ postscreen_dnsbl_action = enforce
 postscreen_pipelining_enable = yes
 postscreen_non_smtp_command_enable = yes
 postscreen_bare_newline_enable = yes
+{% endif %}
+
 # control relay access
 smtpd_relay_restrictions = permit_mynetworks, permit_tls_clientcerts,
-	# allow nobody else
-	defer_unauth_destination
+    # allow nobody else
+    defer_unauth_destination
 # spam-protection restrictions
 smtpd_helo_required = yes
 smtpd_recipient_restrictions = permit_mynetworks, permit_tls_clientcerts,
-	# check everybody else
-	reject_unauth_pipelining,
-        reject_invalid_helo_hostname,
-	reject_non_fqdn_recipient,
-	reject_non_fqdn_sender,
+    # check everybody else
+    reject_unauth_pipelining,
+    reject_invalid_helo_hostname,
+    reject_non_fqdn_recipient,
+    reject_non_fqdn_sender,
 
 # misc
 smtpd_delay_reject = yes

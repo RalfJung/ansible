@@ -1,4 +1,8 @@
-- hosts: all
+- hosts: all:!base_only
   roles:
   - postfix
   - journalwatch
+  tasks:
+  # some basic security stuff that relies on working email
+  - name: install apticron, fail2ban
+    apt: name=apticron,fail2ban state=latest

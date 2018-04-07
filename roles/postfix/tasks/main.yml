@@ -1,10 +1,13 @@
 - name: install postfix
   apt: name=postfix,bsd-mailx state=latest
-- name: install postfix main.cf
+- name: install postfix config
   register: config_main
   template:
-    src: templates/main.cf
-    dest: /etc/postfix/main.cf
+    src: templates/{{ item }}
+    dest: /etc/postfix/{{ item }}
+  with_items:
+  - main.cf
+  - master.cf
 - name: reload postfix
   service: name=postfix state=restarted enabled=yes
   when: config_main.changed
