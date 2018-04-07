@@ -1,8 +1,8 @@
+compatibility_level = 2
+
 # local delivery: aliases only
 alias_maps = hash:/etc/aliases
 local_recipient_maps = $alias_maps
-# only consider ourselves local
-mynetworks_style = host
 {% if postfix.mynetworks is defined %}
 mynetworks = {{ postfix.mynetworks }}
 {% endif %}
@@ -27,18 +27,7 @@ smtp_tls_security_level = dane
 smtp_dns_support_level = dnssec
 {% endif %}
 
-{% if postfix.relay_host is defined %}
-# Relay everything
-default_transport = smtp:{{ postfix.relay_host }}
-{% if postfix.relay_client_cert is defined %}
-# Enforce relay encryption
-smtp_tls_cert_file=$config_directory/{{ postfix.relay_client_cert }}.crt
-smtp_tls_key_file=$config_directory/{{ postfix.relay_client_cert }}.key
-smtp_tls_security_level = encrypt
-{% endif %}
-{% endif %}
-
-{% if postfix.postscreen is defined and postfix.postscreen %}
+{% if postfix.postscreen | default(False) %}
 # postscreen config
 postscreen_dnsbl_threshold = 3
 postscreen_dnsbl_whitelist_threshold = -2
@@ -66,10 +55,71 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_tls_clientcerts,
     reject_non_fqdn_recipient,
     reject_non_fqdn_sender,
 
+{% if postfix.relay_host is defined %}
+# Relay everything
+default_transport = smtp:{{ postfix.relay_host }}
+{% if postfix.relay_client_cert is defined %}
+# Enforce relay encryption
+smtp_tls_cert_file=$config_directory/{{ postfix.relay_client_cert }}.crt
+smtp_tls_key_file=$config_directory/{{ postfix.relay_client_cert }}.key
+smtp_tls_security_level = encrypt
+{% endif %}
+{% endif %}
+
+{% if postfix.submission | default(False) %}
+# configure SASL
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+{% endif %}
+
+{% if postfix.relay_client_cert_whitelist is defined %}
+# allow relay for some TLS-authenticated clients
+smtpd_tls_ask_ccert = yes
+smtpd_tls_fingerprint_digest = sha1
+relay_clientcerts = hash:$config_directory/{{ postfix.relay_client_cert_whitelist }}
+{% endif %}
+
+{% if postfix.virtual_mailbox_domains is defined %}
+# setup virtual delivery domains, aliases and destinations
+virtual_mailbox_domains = {{ postfix.virtual_mailbox_domains }}
+virtual_alias_maps = hash:$config_directory/virtual_alias_map
+  {% if postfix.vmail_mysql_password is defined %}
+  proxy:mysql:$config_directory/mysql_vmail_aliases.cf
+  {% endif %}
+#
+virtual_mailbox_maps =
+  {% if postfix.vmail_mysql_password is defined %}
+  proxy:mysql:$config_directory/mysql_vmail_users.cf
+  {% endif %}
+  {% if postfix.mailman | default(False) %}
+  hash:/var/lib/mailman/data/virtual-mailman
+  {% endif %}
+#
+smtpd_sender_login_maps =
+  {% if postfix.vmail_mysql_password is defined %}
+  proxy:mysql:$config_directory/mysql_vmail_users.cf
+  proxy:mysql:$config_directory/mysql_vmail_senders.cf
+  proxy:mysql:$config_directory/mysql_vmail_aliases.cf
+  {% endif %}
+#
+proxy_read_maps = $virtual_alias_maps $virtual_mailbox_maps $smtpd_sender_login_maps
+
+# setup mail routes for virtual mail: all mail ends up being forwarded somewhere
+virtual_transport = error
+transport_maps = hash:/etc/postfix/transport_map
+mailman_destination_recipient_limit = 1
+{% endif %}
+
+{% if postfix.opendkim | default(False) %}
+# DKIM & Milter
+milter_default_action = accept
+smtpd_milters = unix:opendkim/sock
+non_smtpd_milters = $smtpd_milters
+{% endif %}
+
 # misc
 smtpd_delay_reject = yes
 disable_vrfy_command = yes
 recipient_delimiter = +
 delay_warning_time = 4h
 message_size_limit = 21384000
-append_dot_mydomain = no
