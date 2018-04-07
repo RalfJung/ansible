@@ -2,6 +2,9 @@
 - hosts: all
   tasks:
   # packages
+  - name: check minimal system version
+    command: "false"
+    when: not (ansible_distribution == "Debian" and ansible_lsb.major_release|int >= 9)
   - name: detect if we have backports in the sources.list
     command: fgrep backports /etc/apt/sources.list
     register: backports
@@ -11,7 +14,7 @@
     when: backports.rc != 0
   - name: get rid of packages we do not want
     apt: name=exim4-base,rpcbind state=absent autoremove=yes
-  - name: install latest version of some packages, coming from backports if possible
+  - name: install needrestart, git
     apt: name=needrestart,git state=latest default_release={{ansible_distribution_release}}-backports
   # server-scripts
   - name: clone server-scripts git repository
