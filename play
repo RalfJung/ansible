@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+HOST="$1"
+shift
+
+echo "Playing on $HOST"
+ansible-playbook --diff -l "$HOST" "$@"
