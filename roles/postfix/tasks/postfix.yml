@@ -1,0 +1,45 @@
+- name: install postfix
+  apt: name=postfix,bsd-mailx state=latest
+- name: install postfix-mysql
+  apt: name=postfix-mysql state=latest
+  when: postfix.vmail_mysql_password is defined
+- name: enable postfix
+  service: name=postfix enabled=yes
+# config
+- name: install postfix config
+  template:
+    dest: /etc/postfix/{{ item }}
+    src: templates/{{ item }}
+  loop:
+  - main.cf
+  - master.cf
+  notify: postfix
+- name: install postfix mysql config
+  template:
+    dest: /etc/postfix/{{ item }}
+    src: templates/{{ item }}
+    mode: u=rw,g=r,o=
+    group: postfix
+  loop:
+  - mysql_vmail_aliases.cf
+  - mysql_vmail_senders.cf
+  - mysql_vmail_users.cf
+  notify: postfix
+  when: postfix.vmail_mysql_password is defined
+- name: create empty maps
+  copy:
+    dest: /etc/postfix/{{ item }}
+    content: ""
+    force: no
+  loop:
+  - virtual_alias_map
+  - transport_map
+  when: postfix.virtual_mailbox_domains is defined
+# cronjob
+- name: delete old local-mail cronjob
+  file: path=/etc/cron.daily/local-mail state=absent
+- name: install check-for-local-mail cronjob
+  copy:
+    dest: /etc/cron.daily/check-for-local-mail
+    src: files/check-for-local-mail
+    mode: u=rwx,g=rx,o=rx

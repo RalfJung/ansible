@@ -1,0 +1,35 @@
+- name: install opendkim
+  apt: name=opendkim,opendkim-tools state=latest
+- name: enable opendkim
+  service: name=opendkim enabled=yes
+# env
+- name: install opendkim env
+  register: opendkim_env
+  template:
+    dest: /etc/default/opendkim
+    src: templates/opendkim.env
+- name: regenerate opendkim service
+  shell: /lib/opendkim/opendkim.service.generate && systemctl daemon-reload
+  when: opendkim_env.changed
+  notify: opendkim
+# tables
+- name: generate opendkim keys
+  shell: mkdir /etc/opendkim/{{ item }}/ && opendkim-genkey --bits=2048 -s mail -d {{ item }} -D /etc/opendkim/{{ item }}/
+  args:
+    creates: /etc/opendkim/{{ item }}/mail.private
+    warn: False
+  loop: "{{ postfix.opendkim.private_keys }}"
+- name: generate opendkim tables
+  template:
+    dest: /etc/opendkim/{{ item }}
+    src: templates/{{ item }}
+  loop:
+  - KeyTable
+  - SigningTable
+  notify: opendkim
+# config
+- name: install opendkim config
+  template:
+    dest: /etc/opendkim.conf
+    src: templates/opendkim.conf
+  notify: opendkim

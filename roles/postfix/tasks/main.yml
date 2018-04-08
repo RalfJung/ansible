@@ -1,44 +1,11 @@
-- name: install postfix
-  apt: name=postfix,bsd-mailx state=latest
-- name: install postfix-mysql
-  apt: name=postfix-mysql state=latest
-  when: postfix.vmail_mysql_password is defined
-- name: install postfix config
-  register: postfix_config
-  template:
-    dest: /etc/postfix/{{ item }}
-    src: templates/{{ item }}
-  with_items:
-  - main.cf
-  - master.cf
-- name: install postfix mysql config
-  register: postfix_mysql
-  template:
-    dest: /etc/postfix/{{ item }}
-    src: templates/{{ item }}
-    mode: u=rw,g=r,o=
-    group: postfix
-  with_items:
-  - mysql_vmail_aliases.cf
-  - mysql_vmail_senders.cf
-  - mysql_vmail_users.cf
-  when: postfix.vmail_mysql_password is defined
-- name: create empty maps
-  copy:
-    dest: /etc/postfix/{{ item }}
-    content: ""
-    force: no
-  with_items:
-  - virtual_alias_map
-  - transport_map
-  when: postfix.virtual_mailbox_domains is defined
-- name: reload postfix
-  service: name=postfix state=restarted enabled=yes
-  when: postfix_config.changed or postfix_mysql.changed
-- name: delete old local-mail cronjob
-  file: path=/etc/cron.daily/local-mail state=absent
-- name: install check-for-local-mail cronjob
-  copy:
-    dest: /etc/cron.daily/check-for-local-mail
-    src: files/check-for-local-mail
-    mode: u=rwx,g=rx,o=rx
+# base
+- name: create dh2048 file
+  command: openssl dhparam -out {{ postfix.paths.dh2048 }} 2048
+  args:
+    creates: "{{ postfix.paths.dh2048 }}"
+# daemons
+- import_tasks: opendkim.yml
+  tags: opendkim
+  when: postfix.opendkim is defined
+- import_tasks: postfix.yml
+  tags: postfix

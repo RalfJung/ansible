@@ -1,0 +1,3 @@
+{% for item in postfix.opendkim.signing_table.items() %}
+{{ item[0] }}   {{ item[1] }}
+{% endfor %}

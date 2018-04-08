@@ -13,7 +13,7 @@ smtpd_tls_key_file=/etc/ssl/private/letsencrypt/live.key
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 smtpd_tls_security_level = may
 smtpd_tls_loglevel = 1
-smtpd_tls_dh1024_param_file = /etc/ssl/dh2048.pem
+smtpd_tls_dh1024_param_file = {{ postfix.paths.dh2048 }}
 smtpd_tls_mandatory_protocols = !SSLv2 !SSLv3
 smtpd_tls_ciphers = low
 smtpd_tls_mandatory_ciphers = high
@@ -110,9 +110,10 @@ transport_maps = hash:/etc/postfix/transport_map
 mailman_destination_recipient_limit = 1
 {% endif %}
 
-{% if postfix.opendkim | default(False) %}
+{% if postfix.opendkim is defined %}
 # DKIM & Milter
 milter_default_action = accept
+# Path must match opendkim.env
 smtpd_milters = unix:opendkim/sock
 non_smtpd_milters = $smtpd_milters
 {% endif %}

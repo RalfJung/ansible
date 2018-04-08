@@ -1,23 +1,2 @@
-- name: install journalwatch dependencies
-  apt: name=python3-systemd state=latest
-- name: install journalwatch
-  git:
-    dest: /root/journalwatch
-    repo: 'https://github.com/The-Compiler/journalwatch.git'
-    version: b62f223bc36eabc193cfcf0d309d284da4f66463
-- name: create journalwatch config dir
-  file: path=/root/.config/journalwatch state=directory
-- name: install journalwatch config files
-  template:
-    src: templates/{{item}}
-    dest: /root/.config/journalwatch/{{item}}
-  with_items:
-  - config
-  - patterns
-- name: delete old journalwatch crontab entry
-  file: path=/etc/cron.d/journalwatch state=absent
-- name: create journalwatch crontab entry
-  cron:
-    name: "journalwatch"
-    minute: "*/10"
-    job: "/root/journalwatch/journalwatch.py mail"
+- import_tasks: journalwatch.yml
+  tags: journalwatch

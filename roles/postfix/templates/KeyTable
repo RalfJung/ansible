@@ -1,0 +1,3 @@
+{% for item in postfix.opendkim.private_keys %}
+{{ item }}      {{ item }}:mail:/etc/opendkim/{{ item }}/mail.private
+{% endfor %}
