@@ -16,8 +16,8 @@
     apt: name=exim4-base,rpcbind state=absent autoremove=yes
   - name: install needrestart (from backports)
     apt: name=needrestart state=latest default_release={{ansible_distribution_release}}-backports
-  - name: install aptitude, rsync, git
-    apt: name=aptitude,rsync,git state=latest
+  - name: install some basic tools
+    apt: name=aptitude,rsync,git,curl,apt-transport-https state=latest
   # server-scripts
   - name: clone server-scripts git repository
     git:

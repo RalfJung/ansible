@@ -1,0 +1,36 @@
+- name: install apache
+  apt: name=apache2 state=latest
+- name: enable apache
+  service: name=apache2 enabled=yes
+# config
+- name: enable modules
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  loop:
+  - headers
+  - ssl
+  - macro
+  notify: apache
+- name: install shared config files
+  copy:
+    dest: /etc/apache2/conf-available/{{ item }}
+    src: files/{{ item }}
+  loop:
+  - ssl.conf
+  - acme-challenge.conf
+  - php5.conf
+  - security.conf
+  - other-vhosts-access-log.conf
+  notify: apache
+- name: enable config files
+  command: a2enconf {{ item }}
+  args:
+    creates: /etc/apache2/conf-enabled/{{ item }}.conf
+  loop:
+  - ssl
+- name: install default site
+  template:
+    dest: /etc/apache2/sites-available/000-default.conf
+    src: templates/000-default.conf
+  notify: apache
