@@ -1,10 +1,13 @@
 - hosts: all
+  gather_facts: no
   tasks:
+  - name: autoremove
+    apt: autoremove=yes
+  - name: autoclean
+    apt: autoclean=yes
   - name: system upgrade
-    apt:
-      autoremove: yes
-      autoclean: yes
-      update_cache: yes
-      upgrade: dist
+    apt: update_cache=yes upgrade=dist
     environment:
       NEEDRESTART_MODE: automatically
+    register: upgrade
+  - debug: msg={{ upgrade.msg }}
