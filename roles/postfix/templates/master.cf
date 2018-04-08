@@ -11,6 +11,7 @@
 # ==========================================================================
 {% if postfix.postscreen is defined and postfix.postscreen %}
 smtp       inet  n       -       y       -       1       postscreen
+smtpd      pass  -       -       y       -       -       smtpd
 dnsblog    unix  -       -       y       -       0       dnsblog
 tlsproxy   unix  -       -       y       -       0       tlsproxy
 {% else %}
