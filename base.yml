@@ -14,10 +14,13 @@
     when: backports.rc != 0
   - name: get rid of packages we do not want
     apt: name=exim4-base,rpcbind state=absent autoremove=yes
-  - name: install needrestart, git
-    apt: name=needrestart,git state=latest default_release={{ansible_distribution_release}}-backports
+  - name: install needrestart (from backports)
+    apt: name=needrestart state=latest default_release={{ansible_distribution_release}}-backports
+  - name: install aptitude, rsync, git
+    apt: name=aptitude,rsync,git state=latest
   # server-scripts
   - name: clone server-scripts git repository
     git:
-      repo: 'git://ralfj.de/server-scripts'
       dest: /root/server-scripts
+      repo: 'git://ralfj.de/server-scripts'
+      version: 07d301fd8adeaf8ad40591a418da394ad37816ce

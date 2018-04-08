@@ -2,9 +2,9 @@
   apt: name=python3-systemd state=latest
 - name: install journalwatch
   git:
+    dest: /root/journalwatch
     repo: 'https://github.com/The-Compiler/journalwatch.git'
     version: b62f223bc36eabc193cfcf0d309d284da4f66463
-    dest: /root/journalwatch
 - name: create journalwatch config dir
   file: path=/root/.config/journalwatch state=directory
 - name: install journalwatch config files
