@@ -4,5 +4,8 @@
   - journalwatch
   tasks:
   # some basic security stuff that relies on working email
-  - name: install apticron, fail2ban
-    apt: name=apticron,fail2ban state=latest
+  - name: install apticron
+    apt: name=apticron state=latest
+  # cleanup
+  - name: clean up fail2ban
+    apt: name=fail2ban state=absent purge=true
