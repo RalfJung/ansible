@@ -18,7 +18,7 @@
   - name: install needrestart (from backports)
     apt: name=needrestart state=latest default_release={{ansible_distribution_release}}-backports
   - name: install some basic tools
-    apt: name=aptitude,rsync,git,curl,apt-transport-https,psmisc state=latest
+    apt: name=aptitude,rsync,git,mercurial,curl,apt-transport-https,psmisc state=latest
   # server-scripts
   - name: clone server-scripts git repository
     git:

@@ -1,6 +1,6 @@
 # install
 - name: install prosody
-  apt: name=prosody state=latest default_release={{ansible_distribution_release}}-backports
+  apt: name=prosody,lua-zlib,lua-dbi-sqlite3 state=latest default_release={{ansible_distribution_release}}-backports
 - name: fetch prosody modules
   hg:
     dest: "{{ prosody.paths.modules }}"
