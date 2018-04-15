@@ -4,6 +4,8 @@
   args:
     creates: "{{ postfix.paths.dh2048 }}"
 # daemons
+- import_tasks: unbound.yml
+  tags: unbound
 - import_tasks: opendkim.yml
   tags: opendkim
   when: postfix.opendkim is defined

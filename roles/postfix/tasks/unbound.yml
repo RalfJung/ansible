@@ -1,0 +1,17 @@
+# install
+- name: install unbound
+  apt: name=unbound state=latest
+# configure
+- name: configure unbound
+  copy:
+    dest: /etc/unbound/unbound.conf.d/listen.conf
+    src: files/unbound/listen.conf
+  register: unbound_config
+- name: restart unbound
+  # not a handler to make sure it succeeds before we go touch system DNS
+  when: unbound_config.changed
+  service: name=unbound state=restarted enabled=yes
+- name: configure system DNS
+  copy:
+    dest: /etc/resolv.conf
+    content: "nameserver 127.0.0.2\n"
