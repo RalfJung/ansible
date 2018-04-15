@@ -9,6 +9,7 @@
     command: fgrep backports /etc/apt/sources.list
     register: backports
     failed_when: backports.rc == 2
+    changed_when: False
   - name: add backports repository
     apt_repository: repo='deb http://httpredir.debian.org/debian {{ansible_distribution_release}}-backports main contrib non-free' state=present update_cache=yes
     when: backports.rc != 0
@@ -17,7 +18,7 @@
   - name: install needrestart (from backports)
     apt: name=needrestart state=latest default_release={{ansible_distribution_release}}-backports
   - name: install some basic tools
-    apt: name=aptitude,rsync,git,curl,apt-transport-https state=latest
+    apt: name=aptitude,rsync,git,curl,apt-transport-https,psmisc state=latest
   # server-scripts
   - name: clone server-scripts git repository
     git:
