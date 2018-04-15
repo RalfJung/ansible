@@ -9,8 +9,8 @@
     dest: /etc/default/opendkim
     src: templates/opendkim.env
 - name: regenerate opendkim service
-  shell: /lib/opendkim/opendkim.service.generate && systemctl daemon-reload
   when: opendkim_env.changed
+  shell: /lib/opendkim/opendkim.service.generate && systemctl daemon-reload
   notify: opendkim
 # tables
 - name: generate opendkim keys
