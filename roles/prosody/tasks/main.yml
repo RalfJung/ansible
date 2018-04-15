@@ -1,0 +1,21 @@
+# install
+- name: install prosody
+  apt: name=prosody state=latest default_release={{ansible_distribution_release}}-backports
+- name: fetch prosody modules
+  hg:
+    dest: "{{ prosody.paths.modules }}"
+    repo: 'https://hg.prosody.im/prosody-modules/'
+    version: default
+  notify: prosody
+# configure
+- name: configure prosody
+  template:
+    dest: /etc/prosody/prosody.cfg.lua
+    src: templates/prosody.cfg.lua
+  notify: prosody
+- name: configure apache
+  when: inventory_hostname in groups['apache']
+  template:
+    dest: /etc/apache2/sites-available/{{ prosody.host }}.conf
+    src: templates/apache-site.conf
+  notify: apache

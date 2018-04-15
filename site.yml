@@ -2,3 +2,4 @@
 - import_playbook: upgrade.yml
 - import_playbook: email.yml
 - import_playbook: web.yml
+- import_playbook: jabber.yml
