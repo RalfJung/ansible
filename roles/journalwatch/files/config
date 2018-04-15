@@ -11,5 +11,5 @@
 priority=5
 mail_from=root
 mail_to=root
-mail_subject={hostname}: {count} system events
+mail_subject={hostname}: {count} system events (journalwatch)
 mail_binary=/usr/sbin/sendmail

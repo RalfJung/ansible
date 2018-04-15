@@ -8,8 +8,8 @@
 - name: create journalwatch config dir
   file: path=/root/.config/journalwatch state=directory
 - name: install journalwatch config files
-  template:
-    src: templates/{{item}}
+  copy:
+    src: files/{{item}}
     dest: /root/.config/journalwatch/{{item}}
   loop:
   - config
