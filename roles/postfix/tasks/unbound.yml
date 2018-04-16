@@ -11,6 +11,15 @@
   # not a handler to make sure it succeeds before we go touch system DNS
   when: unbound_config.changed
   service: name=unbound state=restarted enabled=yes
+# use as system DNS
+- name: detect DHCP client
+  stat: path=/etc/dhcp/dhclient.conf
+  register: dhclient
+- name: configure DHCP
+  when: dhclient.stat.exists == True
+  copy:
+    dest: /etc/dhcp/dhclient.conf
+    src: files/unbound/dhclient.conf
 - name: configure system DNS
   copy:
     dest: /etc/resolv.conf
