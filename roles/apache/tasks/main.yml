@@ -12,6 +12,13 @@
   - ssl
   - macro
   notify: apache
+- name: disable modules
+  apache2_module:
+    state: absent
+    name: "{{ item }}"
+  loop:
+  - access_compat
+  notify: apache
 - name: install shared config files
   copy:
     dest: /etc/apache2/conf-available/{{ item }}
