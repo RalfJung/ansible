@@ -59,8 +59,6 @@ warning: non-SMTP command from \w+\[[\da-fA-F.:]+\]: .*
 SYSLOG_IDENTIFIER = sshd
 error: Received disconnect from [\da-fA-F.:]+ port \d+:\d+: .*
 error: maximum authentication attempts exceeded for invalid user \w+ from [\da-fA-F.:]+ port \d+ ssh2( \[preauth\])?
-pam_unix\(sshd:auth\): check pass; user unknown
-(pam_unix\(sshd:auth\): authentication failure|PAM \d+ more authentication failures?); logname= uid=0 euid=0 tty=ssh ruser= rhost=[\da-fA-F.:]+(  user=root)?
 
 _SYSTEMD_UNIT = bind9.service
 client [\da-fA-F.:]+#\d+ \([\w.-]+\): (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type))
