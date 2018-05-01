@@ -8,6 +8,6 @@
   - name: system upgrade
     apt: update_cache=yes upgrade=dist
     environment:
-      NEEDRESTART_MODE: automatically
+      NEEDRESTART_MODE: a
     register: upgrade
   - debug: msg={{ upgrade.msg }}
