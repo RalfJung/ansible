@@ -1,0 +1,39 @@
+#!/usr/bin/python
+import sys, re
+from netaddr import IPAddress
+
+if len(sys.argv) != 2:
+	print >>sys.stderr, "Usage: %s filename" % sys.argv[0]
+	sys.exit(1)
+
+log = open(sys.argv[1], "a")
+
+# group 1 must be the prefix, group 2 the IP, group 3 the suffix
+ipmatch = r"([0-9a-f.:]+)"
+accesslog = re.compile(r"^(\S+ )"+ipmatch+r"( .*)$")
+errorlog = re.compile(r"^(.* \[client )"+ipmatch+r"(\] .*)$")
+
+while True:
+	line = sys.stdin.readline()
+	if not line: break
+	# process this line
+	match = accesslog.search(line)
+	if match is None:
+		match = errorlog.search(line)
+	# check what we got
+	if match is None:
+		# unknown line
+		log.write(line)
+	else:
+		prefix = match.group(1)
+		ip = match.group(2)
+		suffix = match.group(3)
+		try:
+			ip = IPAddress(ip) # parse the addres
+			ip = ip & (IPAddress('255.255.255.0') if ip.version == 4 else IPAddress('ffff:ffff:ffff::')) # mask out a bunch of bits
+			# now we have a parsed representation of the IP address we want to print
+			log.write(prefix+str(ip)+suffix+"\n")
+		except (ValueError, netaddr.core.AddrFormatError):
+			# not actually an IP address...
+			log.write(line)
+	log.flush()

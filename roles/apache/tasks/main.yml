@@ -1,5 +1,5 @@
 - name: install apache
-  apt: name=apache2 state=latest
+  apt: name=apache2,python-netaddr state=latest
 - name: enable apache
   service: name=apache2 enabled=yes
 # config
@@ -19,6 +19,11 @@
   loop:
   - access_compat
   notify: apache
+- name: install log anonymization script
+  copy:
+    dest: /etc/apache2/log-anon
+    src: files/log-anon
+    mode: +x
 - name: install shared config files
   copy:
     dest: /etc/apache2/conf-available/{{ item }}
