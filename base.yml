@@ -23,7 +23,7 @@
   - name: clone server-scripts git repository
     git:
       dest: /root/server-scripts
-      repo: 'git://ralfj.de/server-scripts'
+      repo: 'https://git.ralfj.de/server-scripts.git'
       version: 07d301fd8adeaf8ad40591a418da394ad37816ce
   # configuration
   - name: configure root shell
