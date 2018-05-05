@@ -35,6 +35,13 @@
   loop:
   - virtual_alias_map
   - transport_map
+- name: give postfix user access to opendkim
+  when: postfix.opendkim is defined
+  user:
+    name: postfix
+    groups: opendkim
+    append: yes
+  notify: postfix
 # cronjob
 - name: delete old local-mail cronjob
   file: path=/etc/cron.daily/local-mail state=absent
