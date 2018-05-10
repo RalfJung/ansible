@@ -1,0 +1,11 @@
+#!/bin/bash
+cd "$(dirname "$(readlink -e "$0")")"
+for HOST in "$@"; do
+  echo "Playing on $HOST"
+  ansible-playbook upgrade.yml -l "$HOST"
+  read -p "Do you want me to reboot? (y/N) " ANSWER
+  if [[ "$ANSWER" == y* ]]; then
+    ansible "$HOST" -a "shutdown -r +1"
+  fi
+  echo
+done
