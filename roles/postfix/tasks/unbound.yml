@@ -3,10 +3,20 @@
   apt: name=unbound state=latest
 # configure
 - name: configure unbound
+  register: unbound_config
   copy:
     dest: /etc/unbound/unbound.conf.d/listen.conf
     src: files/unbound/listen.conf
-  register: unbound_config
+- name: configure systemd (create dir)
+  file: path=/etc/systemd/system/unbound.service.d state=directory
+- name: configure systemd (tweak unbound)
+  register: unbound_systemd
+  copy:
+    dest: /etc/systemd/system/unbound.service.d/override.conf
+    src: files/unbound/unbound.service.override
+- name: reload systemd
+  when: unbound_systemd.changed
+  command: systemctl daemon-reload
 - name: restart unbound
   # not a handler to make sure it succeeds before we go touch system DNS
   when: unbound_config.changed
