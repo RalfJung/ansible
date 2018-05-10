@@ -1,0 +1,39 @@
+# packages
+- name: check minimal system version
+  when: not (ansible_distribution == "Debian" and ansible_lsb.major_release|int >= 9)
+  command: "false"
+- name: detect if we have backports in the sources.list
+  command: fgrep backports /etc/apt/sources.list
+  register: backports
+  failed_when: backports.rc == 2
+  changed_when: False
+- name: add backports repository
+  when: backports.rc != 0
+  apt_repository: repo='deb http://httpredir.debian.org/debian {{ansible_distribution_release}}-backports main contrib non-free' state=present update_cache=yes
+- name: get rid of packages we do not want
+  apt: name=exim4-base,rpcbind state=absent autoremove=yes
+- name: install needrestart (from backports)
+  apt: name=needrestart state=latest default_release={{ansible_distribution_release}}-backports
+- name: install some basic tools
+  apt: name=aptitude,rsync,git,mercurial,curl,apt-transport-https,psmisc,dnsutils,tree,htop state=latest
+# server-scripts
+- name: clone server-scripts git repository
+  git:
+    dest: /root/server-scripts
+    repo: 'https://git.ralfj.de/server-scripts.git'
+    version: 07d301fd8adeaf8ad40591a418da394ad37816ce
+# configuration
+- name: configure root shell
+  copy:
+    dest: /root/{{ item }}
+    remote_src: True
+    src: /etc/skel/{{ item }}
+  loop:
+  - .profile
+  - .bashrc
+  - .bash_logout
+- name: configure systemd-timesyncd
+  copy:
+    dest: /etc/systemd/timesyncd.conf
+    src: files/timesyncd.conf
+  notify: timesyncd
