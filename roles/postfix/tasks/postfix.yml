@@ -61,3 +61,18 @@
   file:
     path: /etc/cron.daily/mailman-check
     state: absent
+# tools
+- name: create newmail dir
+  when: postfix.vmail_mysql_password is defined
+  file: path=/root/newmail state=directory
+- name: install newmail script
+  when: postfix.vmail_mysql_password is defined
+  copy:
+    dest: /root/newmail/newmail
+    src: files/newmail/newmail
+    mode: u=rwx,g=rx,o=rx
+- name: install newmail templates
+  when: postfix.vmail_mysql_password is defined
+  copy:
+    dest: /root/newmail/templates.py
+    src: files/newmail/templates.py
