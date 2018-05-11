@@ -8,7 +8,7 @@
   git:
     dest: /var/lib/letsencrypt/lets-encrypt-tiny
     repo: 'https://git.ralfj.de/lets-encrypt-tiny.git'
-    version: 1b15f25eb3f15859f0e0c8f584dcd423fc24a11c
+    version: master
 - name: obtain certificate
   command: /var/lib/letsencrypt/lets-encrypt-tiny/letsencrypt-tiny -c /var/lib/letsencrypt/live.conf init
   args:
