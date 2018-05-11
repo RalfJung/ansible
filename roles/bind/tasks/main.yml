@@ -1,0 +1,31 @@
+- name: install bind
+  apt: name=bind9,hash-slinger state=latest
+- name: install zonemaker
+  git:
+    dest: /var/lib/bind/zonemaker
+    repo: 'https://git.ralfj.de/zonemaker.git'
+    version: master
+- name: install Makefile
+  copy:
+    dest: /var/lib/bind/Makefile
+    src: files/Makefile
+# dyn-nsupdate
+- name: install dyn-nsupdate build-deps
+  apt: name=libboost-regex-dev,libboost-program-options-dev,cmake state=latest
+- name: clone dyn-nsupdate
+  git:
+    dest: /var/lib/bind/dyn-nsupdate.d
+    repo: 'https://git.ralfj.de/dyn-nsupdate.git'
+    version: master
+  register: dyn_nsupdate_src
+- name: create build dir
+  file: path=/var/lib/bind/dyn-nsupdate.d/nsupd-wrapper/build state=directory owner=bind
+- name: compile dyn-nsupdate
+  when: dyn_nsupdate_src.changed
+  become_user: bind
+  shell: "cmake .. -DCMAKE_BUILD_TYPE=Release -DDYNNSUPDATE_CONFIG_FILE=/var/lib/bind/dyn-nsupdate.conf && make"
+  args:
+    chdir: /var/lib/bind/dyn-nsupdate.d/nsupd-wrapper/build
+- name: install dyn-nsupdate
+  when: dyn_nsupdate_src.changed
+  command: install /var/lib/bind/dyn-nsupdate.d/nsupd-wrapper/build/dyn-nsupdate /var/lib/bind/dyn-nsupdate -o bind -g bind -m +rx,u+ws
