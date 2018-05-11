@@ -16,11 +16,6 @@
   apt: name=needrestart state=latest default_release={{ansible_distribution_release}}-backports
 - name: install some basic tools
   apt: name=aptitude,rsync,git,mercurial,curl,apt-transport-https,psmisc,dnsutils,tree,htop state=latest
-# dh2048
-- name: create dh2048 file
-  command: openssl dhparam -out /etc/ssl/dh2048.pem 2048
-  args:
-    creates: "/etc/ssl/dh2048.pem"
 # configuration
 - name: configure root shell
   copy:

@@ -2,7 +2,7 @@
   apt: name=apache2,python-netaddr state=latest
 - name: enable apache
   service: name=apache2 enabled=yes
-# config
+# apache config
 - name: enable modules
   apache2_module:
     state: present
