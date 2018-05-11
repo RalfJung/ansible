@@ -119,7 +119,7 @@ ssl = {
 	key = "/etc/ssl/private/letsencrypt/live.key";
 	certificate = "/etc/ssl/mycerts/letsencrypt/live.crt+chain";
 	ciphers = "ALL:!EXPORT:!LOW:!MEDIUM:!aNULL:!3DES";
-	dhparam = "{{ prosody.paths.dh2048 }}";
+	dhparam = "/etc/ssl/dh2048.pem";
 }
 -- support legacy clients
 legacy_ssl_ports = { 5223 }

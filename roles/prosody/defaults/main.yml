@@ -1,4 +1,3 @@
 prosody:
   paths:
     modules: /var/lib/prosody/modules
-    dh2048: /etc/ssl/dh2048.pem

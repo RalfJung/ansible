@@ -1,8 +1,3 @@
-# base
-- name: create dh2048 file
-  command: openssl dhparam -out {{ postfix.paths.dh2048 }} 2048
-  args:
-    creates: "{{ postfix.paths.dh2048 }}"
 # daemons
 - import_tasks: unbound.yml
   tags: unbound

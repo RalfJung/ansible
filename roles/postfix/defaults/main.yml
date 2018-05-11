@@ -1,3 +1,0 @@
-postfix:
-  paths:
-    dh2048: /etc/ssl/dh2048.pem
