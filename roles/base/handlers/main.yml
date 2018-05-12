@@ -1,2 +1,2 @@
 - name: timesyncd
-  service: name=timesyncd state=restarted
+  service: name=systemd-timesyncd state=restarted
