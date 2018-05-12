@@ -1,0 +1,27 @@
+//========================================================================
+// If BIND logs error messages about the root key being expired,
+// you will need to update your keys.  See https://www.isc.org/bind-keys
+//========================================================================
+
+options {
+	directory "/var/cache/bind";
+	key-directory "/var/lib/bind/keys";
+
+	recursion no;
+	dnssec-enable yes;
+	sig-validity-interval 14;
+
+	auth-nxdomain no;    # conform to RFC1035
+	listen-on { {{ bind.listen }}; 127.0.0.1; };
+{% if bind.listen_v6 is defined %}
+	listen-on-v6 { {{ bind.listen_v6 }}; ::1; };
+{% endif %}
+
+	// hide BIND version
+	version "unknown";
+
+	// do rate-limiting
+	rate-limit {
+		responses-per-second 15;
+	};
+};

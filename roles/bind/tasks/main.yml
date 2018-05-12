@@ -9,6 +9,11 @@
   copy:
     dest: /var/lib/bind/Makefile
     src: files/Makefile
+- name: install bind config
+  template:
+    dest: /etc/bind/named.conf.options
+    src: templates/named.conf.options
+  notify: bind9
 # dyn-nsupdate
 - name: install dyn-nsupdate build-deps
   apt: name=libboost-regex-dev,libboost-program-options-dev,cmake state=latest
