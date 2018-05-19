@@ -1,6 +1,28 @@
-- import_playbook: base.yml
+- hosts: all
+  roles:
+  - base
+  tags: base
+
 - import_playbook: upgrade.yml
-- import_playbook: dns.yml
+
+- hosts: letsencrypt
+  roles:
+  - letsencrypt
+  tags: letsencrypt
+
 - import_playbook: email.yml
-- import_playbook: jabber.yml
-- import_playbook: web.yml
+
+- hosts: bind
+  roles:
+  - bind
+  tags: bind
+
+- hosts: prosody
+  roles:
+  - prosody
+  tags: prosody
+
+- hosts: apache
+  roles:
+  - apache
+  tags: apache

@@ -36,6 +36,7 @@
   - virtual_alias_map
   - transport_map
 - name: give postfix user access to opendkim
+  # we assume the user alredy exists (it is created above by installing postfix)
   when: postfix.opendkim is defined
   user:
     name: postfix

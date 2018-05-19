@@ -1,4 +1,0 @@
-# basic system preparation
-- hosts: all
-  roles:
-  - base
