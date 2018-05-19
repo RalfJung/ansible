@@ -1,28 +1,34 @@
 - hosts: all
+  gather_facts: no
+  pre_tasks:
+  - setup:
   roles:
   - base
   tags: base
 
-- import_playbook: upgrade.yml
-
 - hosts: letsencrypt
+  gather_facts: no
   roles:
   - letsencrypt
   tags: letsencrypt
 
+# FIXME make this a role, or several
 - import_playbook: email.yml
 
 - hosts: bind
+  gather_facts: no
   roles:
   - bind
   tags: bind
 
 - hosts: prosody
+  gather_facts: no
   roles:
   - prosody
   tags: prosody
 
 - hosts: apache
+  gather_facts: no
   roles:
   - apache
   tags: apache
