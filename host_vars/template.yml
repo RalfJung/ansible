@@ -46,9 +46,10 @@ postfix:
     quota:
       general: 1G
       trash: +10M
-  # optional: File in /etc/postfix that configures client certificates that may use
-  # this server for relaying arbitrary mail.
-  relay_client_cert_whitelist: relay_clientcerts
+  # optional: Hostnames and SHA1 certificate hashes that are allowed to relay email via this host.
+  relay_client_cert_whitelist:
+    - hostname: other.example.org
+      cert: 00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33
   # optional: Configure a host to relay all outgoing email to.
   # Incompatible with smtp_outgoing.
   relay_host: mx.example.org

@@ -76,7 +76,7 @@ smtpd_sasl_path = private/auth
 # allow relay for some TLS-authenticated clients
 smtpd_tls_ask_ccert = yes
 smtpd_tls_fingerprint_digest = sha1
-relay_clientcerts = hash:$config_directory/{{ postfix.relay_client_cert_whitelist }}
+relay_clientcerts = hash:$config_directory/relay_clientcerts
 {% endif %}
 
 {% if postfix.virtual_mailbox_domains is defined %}

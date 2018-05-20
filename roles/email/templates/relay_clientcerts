@@ -1,0 +1,4 @@
+# Whitelist for client certificates that may relay
+{% for item in postfix.relay_client_cert_whitelist %}
+{{item.cert}}		{{item.hostname}}
+{% endfor %}

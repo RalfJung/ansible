@@ -60,13 +60,12 @@
   when: sender_transport_map.changed
   command: postmap /etc/postfix/sender_transport_map
   notify: postfix
-- name: create empty relay_clientcerts
+- name: create relay_clientcerts
   when: postfix.relay_client_cert_whitelist is defined
   register: relay_clientcerts
-  copy:
+  template:
     dest: /etc/postfix/relay_clientcerts
-    content: ""
-    force: no
+    src: templates/relay_clientcerts
 - name: postmap relay_clientcerts
   when: relay_clientcerts.changed
   command: postmap /etc/postfix/relay_clientcerts
