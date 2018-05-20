@@ -21,6 +21,12 @@
   - bind
   tags: bind
 
+- hosts: etherpad
+  gather_facts: no
+  roles:
+  - etherpad
+  tags: etherpad
+
 - hosts: prosody
   gather_facts: no
   roles:

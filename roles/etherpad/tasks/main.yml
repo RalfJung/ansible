@@ -1,0 +1,33 @@
+- name: create nodejs user
+  user:
+    name: nodejs
+    system: yes
+    group: nogroup
+    home: /var/lib/nodejs
+    shell: /bin/false
+- name: create etherpad dir
+  file: path=/srv/{{etherpad.domain}} state=directory owner=nodejs group=www-data
+- name: check out etherpad sources
+  become_user: nodejs
+  register: etherpad_src
+  git:
+    dest: /srv/{{etherpad.domain}}/etherpad-lite
+    repo: 'https://github.com/ether/etherpad-lite.git'
+    version: '1.6.6'
+    force: yes
+- name: create etherpad service file
+  register: etherpad_service
+  template:
+    dest: /etc/systemd/system/etherpad-lite.service
+    src: templates/etherpad-lite.service
+- name: configure etherpad
+  register: etherpad_settings
+  template:
+    dest: /srv/{{etherpad.domain}}/etherpad-lite/settings.json
+    src: templates/settings.json
+    mode: u=rw,g=,o=
+    owner: nodejs
+    group: nogroup
+- name: (re)start and enable etherpad service
+  when: etherpad_src.changed or etherpad_service.changed or etherpad_settings.changed
+  systemd: name=etherpad-lite state=restarted daemon_reload=yes enabled=yes

@@ -1,0 +1,14 @@
+[Unit]
+Description=etherpad-lite (real-time collaborative document editing)
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=nodejs
+Group=nogroup
+Environment=NODE_ENV=production
+ExecStart=/srv/{{etherpad.domain}}/etherpad-lite/bin/run.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
