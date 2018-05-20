@@ -5,6 +5,9 @@
   apt: name=postfix-mysql state=latest
 - name: enable postfix
   service: name=postfix enabled=yes
+- name: install mailman
+  when: postfix.mailman is defined and postfix.mailman
+  apt: name=mailman state=latest
 # config
 - name: install postfix config
   template:
@@ -45,6 +48,28 @@
 - name: postmap virtual_alias_map
   when: virtual_alias_map.changed
   command: postmap /etc/postfix/virtual_alias_map
+  notify: postfix
+- name: create empty sender_transport_map
+  when: postfix.smtp_outgoing is defined
+  register: sender_transport_map
+  copy:
+    dest: /etc/postfix/sender_transport_map
+    content: ""
+    force: no
+- name: postmap sender_transport_map
+  when: sender_transport_map.changed
+  command: postmap /etc/postfix/sender_transport_map
+  notify: postfix
+- name: create empty relay_clientcerts
+  when: postfix.relay_client_cert_whitelist is defined
+  register: relay_clientcerts
+  copy:
+    dest: /etc/postfix/relay_clientcerts
+    content: ""
+    force: no
+- name: postmap relay_clientcerts
+  when: relay_clientcerts.changed
+  command: postmap /etc/postfix/relay_clientcerts
   notify: postfix
 - name: create transport_map
   when: postfix.virtual_mailbox_domains is defined

@@ -1,0 +1,77 @@
+postfix:
+  # optional: Whether to put a postscreen on port 25
+  postscreen: True
+  # optional: Whether to accept emails for arbitrary destination on the submission port,
+  # authenticated by dovecot.  Requires a dovecot: section (see below).
+  submission: True
+  # optional: Whether to install mailman and add it as a possible postfix transport.
+  mailman: True
+  # optional: From which IPs to accept mail.
+  mynetworks: '127.0.0.0/8 [::1]/128 203.0.113.0/24'
+  # optional: List multiple outgoing transports using different IP addresses.
+  # Requires default_smtp_outgoing to be set to one of them.  The file
+  # /etc/postfix/sender_transport_map on the server can be used to configure
+  # which transport is used depending on the sender address.
+  smtp_outgoing:
+    - name: smtp1
+      hostname: one.example.org
+      ip: 203.0.113.1
+      ip_v6: 2001:DB8::1
+    - name: smtp2
+      hostname: two.example.org
+      ip: 203.0.113.2
+  default_smtp_outgoing: smtp1
+  # optional: Enabled opendkim for incoming and outgoing DKIM support.
+  opendkim:
+    # list of private keys
+    private_keys:
+    - example.org
+    # table mapping outgoing domains to the private key used for signing mail
+    signing_table:
+      example.org: example.org
+      lists.example.org: example.org
+  # optional: List of domains and transports to use.  The file /etc/postfix/virtual_alias_map
+  # can be used to configure aliases for these domains.
+  virtual_mailbox_domains:
+    - domain: lists.example.org
+      transport: mailman
+    - domain: example.org
+      transport: lmtp:unix:private/dovecot-lmtp
+  # optional: Install and configure dovecot
+  dovecot:
+    mysql_password: $RANDOM
+    vmail_uid: 200
+    mail_gid: 8
+    postmaster: postmaster@example.org
+    quota:
+      general: 1G
+      trash: +10M
+  # optional: File in /etc/postfix that configures client certificates that may use
+  # this server for relaying arbitrary mail.
+  relay_client_cert_whitelist: relay_clientcerts
+  # optional: Configure a host to relay all outgoing email to.
+  # Incompatible with smtp_outgoing.
+  relay_host: mx.example.org
+  # optional: Files in /etc/postfix ($FILE.crt, $FILE.key) to use as client certificates when
+  # relaying to the relay_host.
+  relay_client_cert: client_cert
+
+apache:
+  default_host: www.example.org
+
+prosody:
+  host: jabber.example.org
+  admins:
+  - admin@jabber.example.org
+
+bind:
+  # which IPv4 address to listen on
+  listen: 203.0.113.1
+  # optional: which IPv4 address to listen on
+  listen_v6: 2001:DB8::1
+
+etherpad:
+  domain: pad.example.org
+  default_text: "Welcome to Etherpad!\\n\\nThis pad text is synchronized as you type, so that everyone viewing this page sees the same text. This allows you to collaborate seamlessly on documents!\\n\\nGet involved with Etherpad at http:\/\/etherpad.org\\n"
+  mysql_password: $RANDOM
+  admin_password: $RANDOM
