@@ -3,6 +3,6 @@ set -e
 
 for HOST in $(fgrep 'all:' hosts | sed 's/.*all: *//g'); do
   echo "Playing on $HOST"
-  ansible-playbook -l "$HOST" "$@"
+  ansible-playbook site.yml -l "$HOST" "$@"
   echo
 done
