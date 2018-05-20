@@ -5,6 +5,9 @@
 - import_tasks: dovecot.yml
   when: postfix.dovecot is defined
   tags: dovecot
+- import_tasks: mailman.yml
+  when: postfix.mailman is defined and postfix.mailman
+  tags: mailman
 - import_tasks: postfix.yml
   tags: postfix
 # some basic security stuff that relies on working email

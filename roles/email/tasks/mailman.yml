@@ -1,0 +1,12 @@
+- name: install mailman
+  apt: name=mailman state=latest
+- name: configure mailman
+  template:
+    dest: /etc/mailman/mm_cfg.py
+    src: templates/mm_cfg.py
+  notify: mailman
+- name: install mailman-check cronjob
+  copy:
+    dest: /etc/cron.daily/mailman-check
+    src: files/mailman-check
+    mode: u=rwx,g=rx,o=rx

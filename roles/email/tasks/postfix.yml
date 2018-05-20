@@ -5,9 +5,6 @@
   apt: name=postfix-mysql state=latest
 - name: enable postfix
   service: name=postfix enabled=yes
-- name: install mailman
-  when: postfix.mailman is defined and postfix.mailman
-  apt: name=mailman state=latest
 # config
 - name: install postfix config
   template:
@@ -88,17 +85,6 @@
     dest: /etc/cron.daily/check-for-local-mail
     src: files/check-for-local-mail
     mode: u=rwx,g=rx,o=rx
-- name: install mailman-check cronjob
-  when: postfix.mailman is defined and postfix.mailman
-  copy:
-    dest: /etc/cron.daily/mailman-check
-    src: files/mailman-check
-    mode: u=rwx,g=rx,o=rx
-- name: remove mailman-check cronjob
-  when: not (postfix.mailman is defined and postfix.mailman)
-  file:
-    path: /etc/cron.daily/mailman-check
-    state: absent
 # tools
 - block:
   - name: create newmail dir

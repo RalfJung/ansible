@@ -4,3 +4,5 @@
   service: name=postfix state=restarted enabled=yes
 - name: dovecot
   service: name=dovecot state=restarted enabled=yes
+- name: mailman
+  service: name=mailman state=restarted enabled=yes

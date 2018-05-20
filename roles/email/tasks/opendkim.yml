@@ -10,7 +10,7 @@
     src: templates/opendkim.env
 - name: regenerate opendkim service
   when: opendkim_env.changed
-  shell: /lib/opendkim/opendkim.service.generate && systemctl daemon-reload && systemd-tmpfiles /etc/tmpfiles.d/opendkim.conf --create
+  shell: /lib/opendkim/opendkim.service.generate && chmod +r /etc/systemd/system/opendkim.service.d/ -R && systemctl daemon-reload && systemd-tmpfiles /etc/tmpfiles.d/opendkim.conf --create
   notify: opendkim
 # tables
 - name: create opendkim dir
