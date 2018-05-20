@@ -12,8 +12,17 @@
   - letsencrypt
   tags: letsencrypt
 
-# FIXME make this a role, or several
-- import_playbook: email.yml
+- hosts: email
+  gather_facts: no
+  roles:
+  - email
+  tags: email
+
+- hosts: journalwatch
+  gather_facts: no
+  roles:
+  - journalwatch
+  tags: journalwatch
 
 - hosts: bind
   gather_facts: no

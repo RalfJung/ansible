@@ -6,3 +6,6 @@
   when: postfix.opendkim is defined
 - import_tasks: postfix.yml
   tags: postfix
+# some basic security stuff that relies on working email
+- name: install apticron
+  apt: name=apticron state=latest

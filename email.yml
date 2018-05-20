@@ -1,8 +1,0 @@
-- hosts: email
-  roles:
-  - postfix
-  - journalwatch
-  tasks:
-  # some basic security stuff that relies on working email
-  - name: install apticron
-    apt: name=apticron state=latest
