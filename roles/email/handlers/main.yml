@@ -2,7 +2,5 @@
   service: name=opendkim state=restarted enabled=yes
 - name: postfix
   service: name=postfix state=restarted enabled=yes
-- name: unbound
-  service: name=unbound state=restarted enabled=yes
 - name: dovecot
   service: name=dovecot state=restarted enabled=yes

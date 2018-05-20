@@ -6,14 +6,14 @@
   register: unbound_config
   copy:
     dest: /etc/unbound/unbound.conf.d/listen.conf
-    src: files/unbound/listen.conf
+    src: files/listen.conf
 - name: configure systemd (create dir)
   file: path=/etc/systemd/system/unbound.service.d state=directory
 - name: configure systemd (tweak unbound)
   register: unbound_systemd
   copy:
     dest: /etc/systemd/system/unbound.service.d/override.conf
-    src: files/unbound/unbound.service.override
+    src: files/unbound.service.override
 - name: reload systemd
   when: unbound_systemd.changed
   command: systemctl daemon-reload
@@ -29,7 +29,7 @@
   when: dhclient.stat.exists == True
   copy:
     dest: /etc/dhcp/dhclient.conf
-    src: files/unbound/dhclient.conf
+    src: files/dhclient.conf
 - name: configure system DNS
   copy:
     dest: /etc/resolv.conf

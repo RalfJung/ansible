@@ -6,6 +6,12 @@
   - base
   tags: base
 
+- hosts: unbound
+  gather_facts: no
+  roles:
+  - unbound
+  tags: unbound
+
 - hosts: letsencrypt
   gather_facts: no
   roles:
