@@ -10,11 +10,14 @@
     src: templates/opendkim.env
 - name: regenerate opendkim service
   when: opendkim_env.changed
-  shell: /lib/opendkim/opendkim.service.generate && systemctl daemon-reload
+  shell: /lib/opendkim/opendkim.service.generate && systemctl daemon-reload && systemd-tmpfiles /etc/tmpfiles.d/opendkim.conf --create
   notify: opendkim
 # tables
+- name: create opendkim dir
+  file: name=/etc/opendkim state=directory owner=opendkim
 - name: generate opendkim keys
   shell: mkdir /etc/opendkim/{{ item }}/ && opendkim-genkey --bits=2048 -s mail -d {{ item }} -D /etc/opendkim/{{ item }}/
+  become_user: opendkim
   args:
     creates: /etc/opendkim/{{ item }}/mail.private
     warn: False
