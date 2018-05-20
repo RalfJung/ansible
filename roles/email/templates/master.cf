@@ -17,6 +17,12 @@ tlsproxy   unix  -       -       y       -       0       tlsproxy
 {% else %}
 smtp      inet  n       -       y       -       -       smtpd
 {% endif %}
+{% if postfix.smtpd_26 is defined and postfix.smtpd_26 %}
+26      inet  n       -       y       -       -       smtpd
+  -o syslog_name=postfix/smtpd2
+  -o smtpd_tls_security_level=encrypt
+  -o smtpd_recipient_restrictions=permit_mynetworks,permit_tls_clientcerts,reject
+{% endif %}
 
 {% if postfix.submission is defined and postfix.submission %}
 submission inet  n       -       y       -       -       smtpd

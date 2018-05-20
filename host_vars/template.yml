@@ -1,6 +1,10 @@
 postfix:
   # optional: Whether to put a postscreen on port 25
   postscreen: True
+  # optional: Open another SMTP daemon on port 26 that only accepts mail from local hosts
+  # (and whitelisted client certs, if applicable).  Useful when the source of the mail is in
+  # a network that blocks port 25 outgoing.
+  smtpd_26: True
   # optional: Whether to accept emails for arbitrary destination on the submission port,
   # authenticated by dovecot.  Requires a dovecot: section (see below).
   submission: True

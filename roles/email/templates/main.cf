@@ -107,11 +107,12 @@ proxy_read_maps = $virtual_alias_maps $virtual_mailbox_maps $smtpd_sender_login_
 
 # setup mail routes for virtual mail: all mail ends up being forwarded somewhere
 virtual_transport = error
-transport_maps = hash:/etc/postfix/transport_map
+transport_maps = hash:$config_directory/transport_map
 mailman_destination_recipient_limit = 1
 {% endif %}
 
 {% if postfix.smtp_outgoing is defined %}
+# send mail via specific IP
 default_transport = {{ postfix.default_smtp_outgoing }}
 sender_dependent_default_transport_maps = hash:$config_directory/sender_transport_map
 {% endif %}
