@@ -4,7 +4,10 @@
     system: yes
     group: nogroup
     home: /var/lib/nodejs
+    create_home: no
     shell: /bin/false
+- name: create nodejs dir
+  file: path=/var/lib/nodejs state=directory owner=nodejs group=nogroup
 - name: create etherpad dir
   file: path=/srv/{{etherpad.domain}} state=directory owner=nodejs group=www-data
 - name: check out etherpad sources

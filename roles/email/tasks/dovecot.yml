@@ -1,0 +1,42 @@
+- name: install dovecot
+  apt: name=dovecot-imapd,dovecot-lmtpd,dovecot-mysql,dovecot-pop3d,dovecot-sieve,dovecot-managesieved state=latest
+- name: enable dovecot
+  service: name=dovecot enabled=yes
+# configuration
+- name: check mail group
+  shell: "test \"$(id -g mail)\" -eq '{{postfix.dovecot.mail_gid}}'"
+  changed_when: "False"
+- name: create vmail user
+  user:
+    name: vmail
+    group: mail
+    uid: "{{postfix.dovecot.vmail_uid}}"
+    shell: /bin/false
+    home: /var/vmail
+    create_home: no
+    system: yes
+- name: create vmail dir
+  file: name=/var/vmail state=directory owner=vmail group=mail
+- name: configure dovecot
+  notify: dovecot
+  template:
+    dest: /etc/dovecot/{{ item }}
+    src: templates/dovecot/{{ item }}
+    mode: u=rw,g=r,o=
+    group: dovecot
+  loop:
+  - conf.d/10-auth.conf
+  - conf.d/10-mail.conf
+  - conf.d/10-master.conf
+  - conf.d/10-ssl.conf
+  - conf.d/15-lda.conf
+  - conf.d/20-imap.conf
+  - conf.d/20-lmtp.conf
+  - conf.d/90-quota.conf
+  - conf.d/auth-sql.conf.ext
+  - dovecot-sql.conf.ext
+- name: install quota notification script
+  template:
+    dest: /etc/dovecot/quota-warning.sh
+    src: templates/dovecot/quota-warning.sh
+    mode: +x

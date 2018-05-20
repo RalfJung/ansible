@@ -1,7 +1,7 @@
 - name: install postfix
   apt: name=postfix,bsd-mailx state=latest
 - name: install postfix-mysql
-  when: postfix.vmail_mysql_password is defined
+  when: postfix.dovecot is defined
   apt: name=postfix-mysql state=latest
 - name: enable postfix
   service: name=postfix enabled=yes
@@ -15,7 +15,7 @@
   - master.cf
   notify: postfix
 - name: install postfix mysql config
-  when: postfix.vmail_mysql_password is defined
+  when: postfix.dovecot is defined
   template:
     dest: /etc/postfix/{{ item }}
     src: templates/{{ item }}
@@ -26,15 +26,6 @@
   - mysql_vmail_senders.cf
   - mysql_vmail_users.cf
   notify: postfix
-- name: create empty maps
-  when: postfix.virtual_mailbox_domains is defined
-  copy:
-    dest: /etc/postfix/{{ item }}
-    content: ""
-    force: no
-  loop:
-  - virtual_alias_map
-  - transport_map
 - name: give postfix user access to opendkim
   # we assume the user alredy exists (it is created above by installing postfix)
   when: postfix.opendkim is defined
@@ -42,6 +33,28 @@
     name: postfix
     groups: opendkim
     append: yes
+  notify: postfix
+# maps
+- name: create empty virtual_alias_map
+  when: postfix.virtual_mailbox_domains is defined
+  register: virtual_alias_map
+  copy:
+    dest: /etc/postfix/virtual_alias_map
+    content: ""
+    force: no
+- name: postmap virtual_alias_map
+  when: virtual_alias_map.changed
+  command: postmap /etc/postfix/virtual_alias_map
+  notify: postfix
+- name: create transport_map
+  when: postfix.virtual_mailbox_domains is defined
+  register: transport_map
+  template:
+    dest: /etc/postfix/transport_map
+    src: templates/transport_map
+- name: postmap transport_map
+  when: transport_map.changed
+  command: postmap /etc/postfix/transport_map
   notify: postfix
 # cronjobs
 - name: delete old local-mail cronjob
@@ -75,4 +88,4 @@
     copy:
       dest: /root/newmail/templates.py
       src: files/newmail/templates.py
-  when: postfix.vmail_mysql_password is defined
+  when: postfix.dovecot is defined

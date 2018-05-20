@@ -1,6 +1,7 @@
+# This is used to check the existance of email addresses (so return *something* for existing addresses, and nothing for others).
 # It is also used to check ownership, mapping email addresses to usernames - however, in my setup, the email address is the username.
 user = vmail
-password = {{ postfix.vmail_mysql_password }}
+password = {{ postfix.dovecot.mysql_password }}
 hosts = localhost
 dbname = vmail
 query = SELECT username FROM users WHERE username='%s' AND active = '1'

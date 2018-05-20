@@ -2,7 +2,7 @@
 # I do not think that mapping to an alias here will work properly for the sender check,
 # so always map to a username.
 user = vmail
-password = {{ postfix.vmail_mysql_password }}
+password = {{ postfix.dovecot.mysql_password }}
 hosts = localhost
 dbname = vmail
 query = SELECT user FROM aliases WHERE mail='%s'

@@ -4,6 +4,9 @@
 - import_tasks: opendkim.yml
   tags: opendkim
   when: postfix.opendkim is defined
+- import_tasks: dovecot.yml
+  when: postfix.dovecot is defined
+  tags: dovecot
 - import_tasks: postfix.yml
   tags: postfix
 # some basic security stuff that relies on working email
