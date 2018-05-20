@@ -56,6 +56,8 @@ postfix:
     quota:
       general: 1G
       trash: +10M
+    # optional: Where to generate a CGI script that users can use to change their password
+    changepw_cgi: /srv/mail.example.org/cgi/changepw
   # optional: Hostnames and SHA1 certificate hashes that are allowed to relay email via this host.
   relay_client_cert_whitelist:
     - hostname: other.example.org

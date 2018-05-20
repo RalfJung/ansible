@@ -85,17 +85,3 @@
     dest: /etc/cron.daily/check-for-local-mail
     src: files/check-for-local-mail
     mode: u=rwx,g=rx,o=rx
-# tools
-- block:
-  - name: create newmail dir
-    file: path=/root/newmail state=directory
-  - name: install newmail script
-    copy:
-      dest: /root/newmail/newmail
-      src: files/newmail/newmail
-      mode: u=rwx,g=rx,o=rx
-  - name: install newmail templates
-    copy:
-      dest: /root/newmail/templates.py
-      src: files/newmail/templates.py
-  when: postfix.dovecot is defined

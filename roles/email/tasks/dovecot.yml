@@ -40,3 +40,21 @@
     dest: /etc/dovecot/quota-warning.sh
     src: templates/dovecot/quota-warning.sh
     mode: +x
+# scripts
+- name: create newmail dir
+  file: path=/root/newmail state=directory
+- name: install newmail script
+  copy:
+    dest: /root/newmail/newmail
+    src: files/newmail/newmail
+    mode: u=rwx,g=rx,o=rx
+- name: install newmail templates
+  copy:
+    dest: /root/newmail/templates.py
+    src: files/newmail/templates.py
+- name: install changepw script
+  when: postfix.dovecot.changepw_cgi is defined
+  template:
+    dest: "{{postfix.dovecot.changepw_cgi}}"
+    src: templates/changepw
+    mode: u=rwx,g=rx,o=

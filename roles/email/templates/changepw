@@ -1,0 +1,102 @@
+#!/usr/bin/env python2
+from __future__ import print_function
+import os, cgi, MySQLdb, subprocess, time
+
+# settings
+DB_NAME = 'vmail'
+DB_USER = 'vmail'
+DB_PW   = '{{postfix.dovecot.mysql_password}}'
+
+# DB stuff
+db = MySQLdb.connect(user=DB_USER, passwd=DB_PW, db=DB_NAME, charset='utf8')
+
+def db_execute(query, args):
+   cursor = db.cursor(MySQLdb.cursors.DictCursor)
+   if len(args) == 1 and isinstance(args[0], dict): args = args[0] # einzelnes dict weiterreichen
+   cursor.execute(query, args)
+   return cursor
+
+def db_fetch_one_row(query, *args):
+   cursor = db_execute(query, args)
+   result = cursor.fetchone()
+   if cursor.fetchone() is not None:
+      raise Exception("Found more than one result, only one was expected")
+   cursor.close()
+   return result
+
+def db_run(query, *args):
+   cursor = db_execute(query, args)
+   cursor.close()
+
+def get_user(name):
+   return db_fetch_one_row('SELECT * FROM users WHERE username=%s', name)
+
+def change_user_pw(name, hash):
+   db_run('UPDATE users SET password=%s WHERE username=%s', hash, name)
+
+def change_user_active(name, active):
+   db_run('UPDATE users SET active=%s WHERE username=%s', int(active), name)
+
+# interaction with dbadm pw
+def compare_pw(hash, plain):
+   try:
+      subprocess.check_output(["doveadm", "pw", "-t", hash, "-p", plain])
+      return True
+   except subprocess.CalledProcessError:
+      return False
+
+def gen_hash(plain):
+   return subprocess.check_output(["doveadm", "pw", "-s", "SHA512-CRYPT", "-r", str(64*1024), "-p", plain]).decode('utf-8').strip()
+
+# the core action
+def act(user, oldpw, newpw1, newpw2):
+   if user is None and oldpw is None and newpw1 is None and newpw2 is None:
+      return
+   if user is None or oldpw is None or newpw1 is None or newpw2 is None:
+      return "<b>Error</b>: You have to fill all the fields."
+   curdata = get_user(user)
+   if curdata is None:
+      return "<b>Error</b>: User not found."
+   if len(newpw1) < 8:
+      return "<b>Error</b>: Password must be at least 8 characters long."
+   if newpw1 != newpw2:
+      return "<b>Error</b>: New passwords do not match."
+   # slow down brute-force attacks
+   time.sleep(2.5)
+   # now go on
+   if not compare_pw(curdata['password'], oldpw):
+      return "<b>Error</b>: Old PW is wrong."
+   new_hash = gen_hash(newpw1)
+   change_user_pw(user, new_hash)
+   # potentially enable this user
+   if curdata['active'] < 0:
+      change_user_active(user, -curdata['active'])
+   return "Password successfully changed."
+
+# print headers
+print("Content-Type: text/html")
+print()
+
+# print document header
+print("<!DOCTYPE html>")
+print("<html><head>")
+print("  <meta charset='utf-8'>")
+print("  <title>User PW change</title>")
+print("  <style type='text/css'> th { text-align: right; } </style>")
+print("</head><body>")
+
+# do stuff
+form = cgi.FieldStorage()
+msg = act(form.getfirst('user'), form.getfirst('oldpw'), form.getfirst('newpw1'), form.getfirst('newpw2'))
+if msg is not None:
+   print("<p>{}</p>".format(msg))
+
+# print form
+print("  <form action='changepw' method='post'><table>")
+print("    <tr><th>Username: </th><td><input type='text' name='user' placeholder='user@domain'></td>")
+print("    <tr><th>Old Password: </th><td><input type='password' name='oldpw'></td>")
+print("    <tr><th>New Password: </th><td><input type='password' name='newpw1'></td>")
+print("    <tr><th>New Password (confirmation): </th><td><input type='password' name='newpw2'></td>")
+print("    <tr><th></th><td><input type='submit' value='Change Password'></td></tr>")
+print("  </table></form>")
+print("</body></html>")

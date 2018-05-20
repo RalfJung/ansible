@@ -2,7 +2,7 @@
 set -e
 
 PERCENT=$1
-FROM="{{postfix.dovecot.postmaster}}"
+FROM="{{postfix.postmaster}}"
 
 msg="From: $FROM
 To: $USER
