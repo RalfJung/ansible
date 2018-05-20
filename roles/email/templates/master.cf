@@ -9,7 +9,7 @@
 # service type  private unpriv  chroot  wakeup  maxproc command + args
 #               (yes)   (yes)   (no)    (never) (100)
 # ==========================================================================
-{% if postfix.postscreen is defined and postfix.postscreen %}
+{% if postfix.postscreen | default(False) %}
 smtp       inet  n       -       y       -       1       postscreen
 smtpd      pass  -       -       y       -       -       smtpd
 dnsblog    unix  -       -       y       -       0       dnsblog
@@ -17,14 +17,14 @@ tlsproxy   unix  -       -       y       -       0       tlsproxy
 {% else %}
 smtp      inet  n       -       y       -       -       smtpd
 {% endif %}
-{% if postfix.smtpd_26 is defined and postfix.smtpd_26 %}
+{% if postfix.smtpd_26 | default(False) %}
 26      inet  n       -       y       -       -       smtpd
   -o syslog_name=postfix/smtpd2
   -o smtpd_tls_security_level=encrypt
   -o smtpd_recipient_restrictions=permit_mynetworks,permit_tls_clientcerts,reject
 {% endif %}
 
-{% if postfix.submission is defined and postfix.submission %}
+{% if postfix.submission | default(False) %}
 submission inet  n       -       y       -       -       smtpd
     -o syslog_name=postfix/submission
     -o smtpd_tls_security_level=encrypt
