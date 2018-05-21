@@ -61,6 +61,9 @@ postfix:
     quota:
       general: 1G
       trash: +10M
+    # Hostname used for both web access (to changepw) and SMTP/IMAP servers in emails
+    # sent by newmail script.
+    host: mail.example.org
     # optional: Where to generate a CGI script that users can use to change their password
     changepw_cgi: /srv/mail.example.org/cgi/changepw
 

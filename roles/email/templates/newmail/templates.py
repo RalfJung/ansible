@@ -16,11 +16,10 @@ Versenden kannst du Mails via SMTP:
 Bitte prüfe, ob das alles funktioniert. Bei Problemen kannst du dich gerne an mich wenden.
 
 Viele Grüße,
-Ralf"""
+{host} Postmaster"""
 INCOMING_FORWARD = "Eingehende Mails werden an deine Adresse {forward} weitergeleitet."
 INCOMING_IMAP    = '''Der Zugriff auf das Postfach erfolgt via IMAP:
   Server: {host}
   Port:   143
   Verschlüsselung: STARTTLS
   Benutzername: {user}'''
-

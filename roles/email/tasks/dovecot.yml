@@ -44,14 +44,17 @@
 - name: create newmail dir
   file: path=/root/newmail state=directory
 - name: install newmail script
-  copy:
+  template:
     dest: /root/newmail/newmail
-    src: files/newmail/newmail
+    src: templates/newmail/newmail
     mode: u=rwx,g=rx,o=rx
-- name: install newmail templates
-  copy:
-    dest: /root/newmail/templates.py
-    src: files/newmail/templates.py
+- name: install newmail config
+  template:
+    dest: /root/newmail/{{ item }}
+    src: templates/newmail/{{ item }}
+  loop:
+  - templates.py
+  - settings.py
 - name: install changepw script
   when: postfix.dovecot.changepw_cgi is defined
   template:
