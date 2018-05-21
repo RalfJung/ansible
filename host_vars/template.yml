@@ -12,6 +12,16 @@ postfix:
   submission: True
   # optional: From which IPs to accept mail.
   mynetworks: '127.0.0.0/8 [::1]/128 203.0.113.0/24'
+  # optional: Hostnames and SHA1 certificate hashes that are allowed to relay email via this host.
+  relay_client_cert_whitelist:
+    - hostname: other.example.org
+      cert: 00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33
+  # optional: Configure a host to relay all outgoing email to.
+  # Incompatible with smtp_outgoing.
+  relay_host: mx.example.org
+  # optional: Files in /etc/postfix ($FILE.crt, $FILE.key) to use as client certificates when
+  # relaying to the relay_host.
+  relay_client_cert: client_cert
   # optional: List multiple outgoing transports using different IP addresses.
   # Requires default_smtp_outgoing to be set to one of them.  The file
   # /etc/postfix/sender_transport_map on the server can be used to configure
@@ -34,22 +44,17 @@ postfix:
     signing_table:
       example.org: example.org
       lists.example.org: example.org
-  # optional: List of domains and transports to use.  The file /etc/postfix/virtual_alias_map
-  # can be used to configure aliases for these domains.
-  virtual_mailbox_domains:
-    - domain: lists.example.org
-      transport: mailman
-    - domain: example.org
-      transport: lmtp:unix:private/dovecot-lmtp
   # optional: install and configure mailman
   mailman:
     default_host: lists.example.org
     default_lang: en # if you change this, also run "dpkg-reconfigure mailman" to enable more languages
-    domains:
+    domains: # the file /etc/postfix/virtual_alias_map can be used to configure aliases
     - lists.example.org
     default_footer: "-- \n%(list_name)s@%(host_name)s - %(description)s\nConfiguration: %(web_page_url)slistinfo%(cgiext)s/%(list_name)s\nUnsubscribe: %(list_name)s-unsubscribe@%(host_name)s\n"
   # optional: Install and configure dovecot
   dovecot:
+    domains: # the file /etc/postfix/virtual_alias_map can be used to configure aliases
+    - example.org
     mysql_password: $RANDOM
     vmail_uid: 200
     mail_gid: 8
@@ -58,16 +63,6 @@ postfix:
       trash: +10M
     # optional: Where to generate a CGI script that users can use to change their password
     changepw_cgi: /srv/mail.example.org/cgi/changepw
-  # optional: Hostnames and SHA1 certificate hashes that are allowed to relay email via this host.
-  relay_client_cert_whitelist:
-    - hostname: other.example.org
-      cert: 00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33
-  # optional: Configure a host to relay all outgoing email to.
-  # Incompatible with smtp_outgoing.
-  relay_host: mx.example.org
-  # optional: Files in /etc/postfix ($FILE.crt, $FILE.key) to use as client certificates when
-  # relaying to the relay_host.
-  relay_client_cert: client_cert
 
 apache:
   default_host: www.example.org

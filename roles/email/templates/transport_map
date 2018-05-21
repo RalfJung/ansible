@@ -1,3 +1,11 @@
-{% for item in postfix.virtual_mailbox_domains %}
-{{item.domain}}		{{item.transport}}
+{% if postfix.mailman is defined %}
+{% for item in postfix.mailman.domains %}
+{{item}}		mailman
 {% endfor %}
+{% endif %}
+
+{% if postfix.dovecot is defined %}
+{% for item in postfix.dovecot.domains %}
+{{item}}		lmtp:unix:private/dovecot-lmtp
+{% endfor %}
+{% endif %}

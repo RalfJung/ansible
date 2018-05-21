@@ -79,9 +79,10 @@ smtpd_tls_fingerprint_digest = sha1
 relay_clientcerts = hash:$config_directory/relay_clientcerts
 {% endif %}
 
-{% if postfix.virtual_mailbox_domains is defined %}
 # setup virtual delivery domains, aliases and destinations
-virtual_mailbox_domains ={% for item in postfix.virtual_mailbox_domains %} {{item.domain}}{% endfor %}
+virtual_mailbox_domains =
+{% if postfix.mailman is defined %}  {% for item in postfix.mailman.domains %} {{item}}{% endfor %}{% endif %}
+{% if postfix.dovecot is defined %}  {% for item in postfix.dovecot.domains %} {{item}}{% endfor %}{% endif %}
 
 virtual_alias_maps = hash:$config_directory/virtual_alias_map
   {% if postfix.dovecot is defined %}
@@ -108,6 +109,7 @@ proxy_read_maps = $virtual_alias_maps $virtual_mailbox_maps $smtpd_sender_login_
 # setup mail routes for virtual mail: all mail ends up being forwarded somewhere
 virtual_transport = error
 transport_maps = hash:$config_directory/transport_map
+{% if postfix.mailman | default(False) %}
 mailman_destination_recipient_limit = 1
 {% endif %}
 

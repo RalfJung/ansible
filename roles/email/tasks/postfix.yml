@@ -36,7 +36,6 @@
   notify: postfix
 # maps
 - name: create empty virtual_alias_map
-  when: postfix.virtual_mailbox_domains is defined
   register: virtual_alias_map
   copy:
     dest: /etc/postfix/virtual_alias_map
@@ -68,7 +67,6 @@
   command: postmap /etc/postfix/relay_clientcerts
   notify: postfix
 - name: create transport_map
-  when: postfix.virtual_mailbox_domains is defined
   register: transport_map
   template:
     dest: /etc/postfix/transport_map
