@@ -65,4 +65,4 @@ _SYSTEMD_UNIT = bind9.service
 client [\da-fA-F.:]+#\d+ \([\w.-]+\): (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type))
 
 _SYSTEMD_UNIT = opendkim.service
-[A-Z0-9]+: bad signature data
+[A-Z0-9]+: (bad signature data|failed to parse authentication-results: header field)
