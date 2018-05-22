@@ -1,3 +1,12 @@
+# Dependencies are "expressed" by the hosts file, e.g.
+# ```
+# [letsencrypt:children]
+# apache
+# email
+# ```
+# I tried using role dependencies but that doesn't interact well with tags:
+# When restricting to a tag, its dependencies still get played.
+
 - hosts: all
   gather_facts: no
   pre_tasks:
@@ -19,12 +28,14 @@
   tags: letsencrypt
 
 - hosts: email
+  # depends: letsencrypt, unbound
   gather_facts: no
   roles:
   - email
   tags: email
 
 - hosts: journalwatch
+  # depends: email
   gather_facts: no
   roles:
   - journalwatch
@@ -43,12 +54,14 @@
   tags: etherpad
 
 - hosts: prosody
+  # depends: letsencrypt
   gather_facts: no
   roles:
   - prosody
   tags: prosody
 
 - hosts: apache
+  # depends: letsencrypt
   gather_facts: no
   roles:
   - apache
