@@ -53,7 +53,7 @@ SYSLOG_IDENTIFIER = sudo
 
 _SYSTEMD_UNIT = postfix@-.service
 warning: hostname [^\s]+ does not resolve to address [\da-fA-F.:]+(: Name or service not known)?
-warning: [._\w-]+\[[\da-fA-F.:]+\]: SASL LOGIN authentication failed: [._\w-]+
+warning: [._\w-]+\[[\da-fA-F.:]+\]: SASL LOGIN authentication failed: .+
 warning: non-SMTP command from \w+\[[\da-fA-F.:]+\]: .*
 warning: TLS library problem: error:[0-9A-F]+:SSL routines:\w+:(no shared cipher|decryption failed or bad record mac):[\w./]+:\d+:
 
