@@ -14,6 +14,7 @@
   loop:
   - config
   - patterns
+  tags: journalwatch-patterns
 - name: delete old journalwatch crontab entry
   file: path=/etc/cron.d/journalwatch state=absent
 - name: create journalwatch crontab entry
