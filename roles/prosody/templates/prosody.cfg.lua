@@ -105,7 +105,7 @@ allow_registration = false
 -- Debian:
 --   send the server to background.
 --
-daemonize = true
+daemonize = false
 
 -- Debian:
 --   Please, don't change this option since /var/run/prosody/
