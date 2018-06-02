@@ -69,6 +69,8 @@ postfix:
 
 apache:
   default_host: www.example.org
+  webmaster: webmaster@example.org
+  server_name: web.example.org
 
 prosody:
   host: jabber.example.org

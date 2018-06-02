@@ -24,15 +24,17 @@
     dest: /etc/apache2/log-anon
     src: files/log-anon
     mode: +x
+  notify: apache
 - name: install shared config files
-  copy:
+  template:
     dest: /etc/apache2/conf-available/{{ item }}
-    src: files/{{ item }}
+    src: templates/{{ item }}
   loop:
   - ssl.conf
   - acme-challenge.conf
   - php5.conf
   - security.conf
+  - defaults.conf
   notify: apache
 - name: enable config files
   command: a2enconf {{ item }}
@@ -41,6 +43,7 @@
   loop:
   - ssl
   - security
+  - defaults
   notify: apache
 - name: disable config files
   command: a2disconf {{ item }}
@@ -48,6 +51,7 @@
     removes: /etc/apache2/conf-enabled/{{ item }}.conf
   loop:
   - other-vhosts-access-log
+  - serve-cgi-bin
   notify: apache
 - name: install default site
   template:
