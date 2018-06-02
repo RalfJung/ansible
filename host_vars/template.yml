@@ -51,6 +51,7 @@ postfix:
     domains: # the file /etc/postfix/virtual_alias_map can be used to configure aliases
     - lists.example.org
     default_footer: "-- \n%(list_name)s@%(host_name)s - %(description)s\nConfiguration: %(web_page_url)slistinfo%(cgiext)s/%(list_name)s\nUnsubscribe: %(list_name)s-unsubscribe@%(host_name)s\n"
+    form_secret: $RANDOM
   # optional: Install and configure dovecot
   dovecot:
     domains: # the file /etc/postfix/virtual_alias_map can be used to configure aliases

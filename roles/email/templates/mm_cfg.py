@@ -128,3 +128,6 @@ DEFAULT_DIGEST_FOOTER = DEFAULT_MSG_FOOTER
 # DMARC, DKIM-compatibility
 REMOVE_DKIM_HEADERS = 1 # remove DKIM headers for lists where From: is changed
 DEFAULT_DMARC_MODERATION_ACTION = 1 # Munge From
+
+# Spammer protection
+SUBSCRIBE_FORM_SECRET = "{{postfix.mailman.form_secret}}"
