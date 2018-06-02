@@ -33,7 +33,6 @@
   - acme-challenge.conf
   - php5.conf
   - security.conf
-  - other-vhosts-access-log.conf
   notify: apache
 - name: enable config files
   command: a2enconf {{ item }}
@@ -41,6 +40,15 @@
     creates: /etc/apache2/conf-enabled/{{ item }}.conf
   loop:
   - ssl
+  - security
+  notify: apache
+- name: disable config files
+  command: a2disconf {{ item }}
+  args:
+    removes: /etc/apache2/conf-enabled/{{ item }}.conf
+  loop:
+  - other-vhosts-access-log
+  notify: apache
 - name: install default site
   template:
     dest: /etc/apache2/sites-available/000-default.conf
