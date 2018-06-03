@@ -16,6 +16,7 @@
   args:
     chdir: /usr/lib/mailman/Mailman
   changed_when: False
+  failed_when: mailman_patched.rc == 2
   register: mailman_patched
 - name: check if all the files have the right checksums to be patched
   shell: 'echo "{{item}}" | sha256sum -c'
