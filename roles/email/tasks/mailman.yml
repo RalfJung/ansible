@@ -10,3 +10,32 @@
     dest: /etc/cron.daily/mailman-check
     src: files/mailman-check
     mode: u=rwx,g=rx,o=rx
+# the CAPTCHA patch (and some template modifications)
+- name: check if the files are already patched
+  shell: 'fgrep MAILMAN_CAPTCHA_PATCHED Cgi/listinfo.py && fgrep MAILMAN_CAPTCHA_PATCHED Cgi/subscribe.py'
+  args:
+    chdir: /usr/lib/mailman/Mailman
+  changed_when: False
+  register: mailman_patched
+- name: check if all the files have the right checksums to be patched
+  shell: 'echo "{{item}}" | sha256sum -c'
+  loop:
+    - "26b4cbb7c5bde8badf741e31975235e74abb932037d77d862cf00b412726c2c2  /usr/lib/mailman/Mailman/Cgi/listinfo.py"
+    - "cbef3d8cb6b65e4c9b2462f8627966d55dd52caa2e626c87241c4f8d47477dc7  /usr/lib/mailman/Mailman/Cgi/subscribe.py"
+  changed_when: False
+  when: mailman_patched.rc != 0
+- name: install patched python files
+  copy:
+    dest: /usr/lib/mailman/Mailman/{{item}}
+    src: files/mailman-patched/{{item}}
+  loop:
+  - Cgi/listinfo.py
+  - Cgi/subscribe.py
+  - Captcha.py
+- name: install patched templates
+  copy:
+    dest: /etc/mailman/{{item}}
+    src: files/mailman-patched/{{item}}
+  loop:
+  - de/listinfo.html
+  - en/listinfo.html

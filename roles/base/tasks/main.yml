@@ -3,7 +3,7 @@
   when: not (ansible_distribution == "Debian" and ansible_lsb.major_release|int >= 9)
   command: "false"
 - name: detect if we have backports in the sources.list
-  command: fgrep backports /etc/apt/sources.list
+  command: 'fgrep backports /etc/apt/sources.list'
   register: backports
   failed_when: backports.rc == 2
   changed_when: False

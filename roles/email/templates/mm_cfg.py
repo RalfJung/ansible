@@ -1,4 +1,5 @@
 # -*- python -*-
+# -*- coding: utf-8 -*-
 
 # Copyright (C) 1998,1999,2000 by the Free Software Foundation, Inc.
 #
@@ -131,3 +132,12 @@ DEFAULT_DMARC_MODERATION_ACTION = 1 # Munge From
 
 # Spammer protection
 SUBSCRIBE_FORM_SECRET = "{{postfix.mailman.form_secret}}"
+CAPTCHAS = [
+{% for item in postfix.mailman.captcha %}
+    ('{{item.question}}', [
+    {% for answer in item.answers %}
+        '{{answer}}',
+    {% endfor %}
+    ]),
+{% endfor %}
+]
