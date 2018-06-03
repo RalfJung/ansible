@@ -38,4 +38,6 @@
     src: files/mailman-patched/{{item}}
   loop:
   - de/listinfo.html
+  - de/subscribeack.txt
   - en/listinfo.html
+  - en/subscribeack.txt
