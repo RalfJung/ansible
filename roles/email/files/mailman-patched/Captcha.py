@@ -18,7 +18,7 @@
 import random
 from Mailman import Utils
 
-def displayhtml(mlist, captchas):
+def display(mlist, captchas):
     """Returns a CAPTCHA question, the HTML for the answer box, and
     the data to be put into the CSRF token"""
     idx = random.randrange(len(captchas))

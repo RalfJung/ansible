@@ -221,7 +221,7 @@ def list_listinfo(mlist, lang):
             #        for our hash so it doesn't matter.
             remote = remote.rsplit(':', 1)[0]
         # get CAPTCHA data
-        (captcha_question, captcha_box, captcha_idx) = Captcha.displayhtml(mlist, mm_cfg.CAPTCHAS)
+        (captcha_question, captcha_box, captcha_idx) = Captcha.display(mlist, mm_cfg.CAPTCHAS)
         replacements['<mm-captcha-question>'] = captcha_question
         replacements['<mm-captcha-box>'] = captcha_box
         # fill form
