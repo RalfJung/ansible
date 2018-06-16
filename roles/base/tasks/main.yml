@@ -11,11 +11,11 @@
   when: backports.rc != 0
   apt_repository: repo='deb http://httpredir.debian.org/debian {{ansible_distribution_release}}-backports main contrib non-free' state=present update_cache=yes
 - name: get rid of packages we do not want
-  apt: name=exim4-base,rpcbind state=absent autoremove=yes
+  apt: name=exim4-base,rpcbind,procmail,fetchmail state=absent autoremove=yes
+- name: install some basic tools
+  apt: name=nano,aptitude,rsync,git,mercurial,curl,apt-transport-https,psmisc,dnsutils,tree,htop,acl,libpam-systemd state=latest
 - name: install needrestart (from backports)
   apt: name=needrestart state=latest default_release={{ansible_distribution_release}}-backports
-- name: install some basic tools
-  apt: name=aptitude,rsync,git,mercurial,curl,apt-transport-https,psmisc,dnsutils,tree,htop,acl state=latest
 # configuration
 - name: configure root shell
   copy:
