@@ -44,9 +44,16 @@ SYSLOG_IDENTIFIER = systemd
 Received SIGRTMIN\+24 from PID .*
 (Reached target|Stopped target) .*
 Startup finished in \d+ms\.
+{% if journalwatch is defined and journalwatch.strato_broken | default(False) %}
+Failed to create /user.slice/user-\d+.slice/user@\d+.service/init.scope control group: Permission denied
+Failed to allocate manager object: Permission denied
+{% endif %}
 
 _SYSTEMD_UNIT = init.scope
 user@\d+\.service: Killing process \d+ \(kill\) with signal SIGKILL\.
+{% if journalwatch is defined and journalwatch.strato_broken | default(False) %}
+Failed to set devices.allow on /system.slice/systemd-resolved.service: Operation not permitted
+{% endif %}
 
 SYSLOG_IDENTIFIER = sudo
 \s*[_\w.-]+ : TTY=(unknown|console|(pts/|ttyp?|vc/)\d+) ; PWD=[^;]+ ; USER=[._\w-]+ ; COMMAND=.*
@@ -56,8 +63,6 @@ warning: hostname [^\s]+ does not resolve to address [\da-fA-F.:]+(: Name or ser
 warning: [._\w-]+\[[\da-fA-F.:]+\]: SASL LOGIN authentication failed: .+
 warning: non-SMTP command from \w+\[[\da-fA-F.:]+\]: .*
 warning: TLS library problem: error:[0-9A-F]+:SSL routines:\w+:(no shared cipher|decryption failed or bad record mac|unknown protocol|version too low):[\w./]+:\d+:
-Failed to create /user.slice/user-\d+.slice/user@\d+.service/init.scope control group: Permission denied
-Failed to allocate manager object: Permission denied
 
 _SYSTEMD_UNIT = dovecot.service
 auth: Warning: auth client \d+ disconnected with \d+ pending requests: (EOF|Connection reset by peer)
