@@ -7,6 +7,7 @@ local_recipient_maps = $alias_maps
 mynetworks = {{ postfix.mynetworks }}
 {% endif %}
 
+{% if 'letsencrypt' in group_names %}
 # TLS server parameters
 smtpd_tls_cert_file=/etc/ssl/mycerts/letsencrypt/live.crt+chain
 smtpd_tls_key_file=/etc/ssl/private/letsencrypt/live.key
@@ -17,6 +18,7 @@ smtpd_tls_dh1024_param_file = /etc/ssl/dh2048.pem
 smtpd_tls_mandatory_protocols = !SSLv2 !SSLv3
 smtpd_tls_ciphers = low
 smtpd_tls_mandatory_ciphers = high
+{% endif %}
 # TLS client parameters
 smtp_tls_mandatory_protocols = !SSLv2 !SSLv3
 smtp_tls_ciphers = low

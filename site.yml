@@ -28,7 +28,7 @@
   tags: letsencrypt
 
 - hosts: email
-  # depends: letsencrypt, unbound
+  # depends: unbound
   gather_facts: no
   roles:
   - email
@@ -63,7 +63,6 @@
   tags: prosody
 
 - hosts: apache
-  # depends: letsencrypt
   gather_facts: no
   roles:
   - apache
