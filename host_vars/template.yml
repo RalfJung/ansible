@@ -14,6 +14,8 @@ postfix:
   submission: True
   # optional: From which IPs to accept mail.
   mynetworks: '127.0.0.0/8 [::1]/128 203.0.113.0/24'
+  # optional: Domains for which to receive emails and forward according to virtual_alias_map.
+  alias_domains: staff.example.org
   # optional: Hostnames and SHA1 certificate hashes that are allowed to relay email via this host.
   relay_client_cert_whitelist:
     - hostname: other.example.org

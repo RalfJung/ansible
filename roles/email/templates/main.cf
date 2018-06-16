@@ -87,7 +87,7 @@ relay_clientcerts = hash:$config_directory/relay_clientcerts
 {% endif %}
 
 # setup virtual delivery domains, aliases and destinations
-virtual_mailbox_domains =
+virtual_mailbox_domains = {{ postfix.alias_domains | default("") }}
 {% if postfix.mailman is defined %}  {% for item in postfix.mailman.domains %} {{item}}{% endfor %}{% endif %}
 {% if postfix.dovecot is defined %}  {% for item in postfix.dovecot.domains %} {{item}}{% endfor %}{% endif %}
 
