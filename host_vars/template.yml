@@ -1,6 +1,8 @@
 postfix:
   # postmaster email address
   postmaster: postmaster@example.org
+  # optional: Hostname of this email system
+  hostname: mail.example.org
   # optional: Whether to put a postscreen on port 25
   postscreen: True
   # optional: Open another SMTP daemon on port 26 that only accepts mail from local hosts

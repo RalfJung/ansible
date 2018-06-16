@@ -1,11 +1,15 @@
 compatibility_level = 2
 
-# local delivery: aliases only
-alias_maps = hash:/etc/aliases
-local_recipient_maps = $alias_maps
+{% if postfix.hostname is defined %}
+myhostname = {{ postfix.hostname }}
+{% endif %}
 {% if postfix.mynetworks is defined %}
 mynetworks = {{ postfix.mynetworks }}
 {% endif %}
+
+# local delivery: aliases only
+alias_maps = hash:/etc/aliases
+local_recipient_maps = $alias_maps
 
 {% if 'letsencrypt' in group_names %}
 # TLS server parameters
