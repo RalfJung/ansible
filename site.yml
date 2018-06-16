@@ -28,7 +28,6 @@
   tags: letsencrypt
 
 - hosts: email
-  # depends: unbound
   gather_facts: no
   roles:
   - email

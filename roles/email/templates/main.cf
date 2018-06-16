@@ -24,9 +24,10 @@ smtp_tls_mandatory_protocols = !SSLv2 !SSLv3
 smtp_tls_ciphers = low
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
 smtp_tls_loglevel = 1
-{% if not(postfix.relay_host is defined) %}
-smtp_tls_security_level = dane
+{% if 'unbound' in group_names %}
+# If there are TLSA records, enforce using encryption
 smtp_dns_support_level = dnssec
+smtp_tls_security_level = dane
 {% endif %}
 
 {% if postfix.postscreen | default(False) %}
