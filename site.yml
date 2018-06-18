@@ -1,8 +1,9 @@
 # Dependencies are "expressed" by the hosts file, e.g.
 # ```
+# [email:children]
+# journalwatch
 # [letsencrypt:children]
-# apache
-# email
+# prosody
 # ```
 # I tried using role dependencies but that doesn't interact well with tags:
 # When restricting to a tag, its dependencies still get played.
