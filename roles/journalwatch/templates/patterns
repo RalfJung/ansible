@@ -72,7 +72,7 @@ error: Received disconnect from [\da-fA-F.:]+ port \d+:\d+: .*
 error: maximum authentication attempts exceeded for (invalid user \w*|\w+) from [\da-fA-F.:]+ port \d+ ssh2( \[preauth\])?
 
 _SYSTEMD_UNIT = bind9.service
-client [\da-fA-F.:]+#\d+ \([\w.-]+\): (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type))
+client [\da-fA-F.:]+#\d+ \([\w.-]+\): (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type|unexpected end of input))
 
 _SYSTEMD_UNIT = opendkim.service
 [A-Z0-9]+: (bad signature data|failed to parse [Aa]uthentication-[Rr]esults: header field)
