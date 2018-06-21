@@ -34,3 +34,8 @@
   copy:
     dest: /etc/resolv.conf
     content: "nameserver 127.0.0.2\n"
+# some providers need extra hacks to make our DNS persistent
+- name: install DNS-fix cronjob
+  template:
+    dest: /etc/cron.hourly/fix-dns
+    src: templates/fix-dns
