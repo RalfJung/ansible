@@ -39,3 +39,4 @@
   template:
     dest: /etc/cron.hourly/fix-dns
     src: templates/fix-dns
+    mode: +x
