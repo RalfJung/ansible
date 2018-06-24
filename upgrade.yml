@@ -10,4 +10,4 @@
     environment:
       NEEDRESTART_MODE: a
     register: upgrade
-  - debug: msg={{ upgrade.msg }}
+#  - debug: msg={{ upgrade.msg }}
