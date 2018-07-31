@@ -58,3 +58,9 @@
     dest: /etc/apache2/sites-available/000-default.conf
     src: templates/000-default.conf
   notify: apache
+# work-arounds and hacks
+- name: cronjob to fix apache startup
+  cron:
+    name: "apache2-start-fix"
+    minute: "*/5"
+    job: "if systemctl is-failed apache2 >/dev/null; then echo 'restarting apache'; systemctl restart apache2; fi"
