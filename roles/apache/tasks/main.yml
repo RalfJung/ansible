@@ -73,9 +73,3 @@
     content: |
       # Disable DAD so network-online.target works for IPv6
       net.ipv6.conf.all.accept_dad=0
-- name: cleanup cronjob to fix apache startup
-  cron:
-    name: "apache2-start-fix"
-    minute: "*/5"
-    job: "if systemctl is-failed apache2 >/dev/null; then echo 'restarting apache'; systemctl restart apache2; fi"
-    state: absent
