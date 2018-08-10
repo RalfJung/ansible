@@ -58,9 +58,24 @@
     dest: /etc/apache2/sites-available/000-default.conf
     src: templates/000-default.conf
   notify: apache
-# work-arounds and hacks
-- name: cronjob to fix apache startup
+# IPv6 autconf issues: DAD makes addresses appear but unusable, which breaks services startup
+- name: tweak apache systemd unit (create dir)
+  file: path=/etc/systemd/system/apache2.service.d state=directory
+- name: tweak apache systemd unit
+  copy:
+    dest: /etc/systemd/system/apache2.service.d/override.conf
+    content: |
+      [Unit]
+      After=network-online.target
+- name: sysconfig to disable DAD
+  copy:
+    dest: /etc/sysctl.d/50-no-dad.conf
+    content: |
+      # Disable DAD so network-online.target works for IPv6
+      net.ipv6.conf.all.accept_dad=0
+- name: cleanup cronjob to fix apache startup
   cron:
     name: "apache2-start-fix"
     minute: "*/5"
     job: "if systemctl is-failed apache2 >/dev/null; then echo 'restarting apache'; systemctl restart apache2; fi"
+    state: absent
