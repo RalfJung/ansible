@@ -67,6 +67,7 @@
     content: |
       [Unit]
       After=network-online.target
+      Wants=network-online.target
 - name: sysconfig to disable DAD
   copy:
     dest: /etc/sysctl.d/50-no-dad.conf
