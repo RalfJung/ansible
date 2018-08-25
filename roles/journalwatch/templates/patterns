@@ -72,7 +72,8 @@ auth: Warning: auth client \d+ disconnected with \d+ pending requests: (EOF|Conn
 
 SYSLOG_IDENTIFIER = sshd
 error: Received disconnect from [\da-fA-F.:]+ port \d+:\d+: .*
-error: maximum authentication attempts exceeded for (invalid user \w*|\w+) from [\da-fA-F.:]+ port \d+ ssh2( \[preauth\])?
+error: maximum authentication attempts exceeded for (invalid user \w*|\w+) from [\da-fA-F.:]+ port \d+ ssh2 \[preauth\]
+fatal: ssh_packet_get_string: string is too large \[preauth\]
 
 _SYSTEMD_UNIT = bind9.service
 client [\da-fA-F.:]+#\d+( \([\w.-]+\))?: (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type|unexpected end of input))
