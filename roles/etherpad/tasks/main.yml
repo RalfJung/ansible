@@ -16,7 +16,7 @@
   git:
     dest: /srv/{{etherpad.domain}}/etherpad-lite
     repo: 'https://github.com/ether/etherpad-lite.git'
-    version: '1.6.6'
+    version: '1.7.0'
     force: yes
 - name: create etherpad service file
   register: etherpad_service
