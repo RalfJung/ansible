@@ -70,9 +70,11 @@
       Wants=network-online.target
       [Service]
       Restart=on-failure
-- name: sysconfig to disable DAD
+- name: cleanup old sysconfig
+  file: path=/etc/sysctl.d/50-no-dad.conf state=absent
+- name: sysconfig to fix IPv6 listening
   copy:
-    dest: /etc/sysctl.d/50-no-dad.conf
+    dest: /etc/sysctl.d/50-ipv6-listen.conf
     content: |
-      # Disable DAD so network-online.target works for IPv6
-      net.ipv6.conf.all.accept_dad=0
+      # Allow binding to IPv6 address before we got that address
+      net.ipv6.ip_nonlocal_bind=1
