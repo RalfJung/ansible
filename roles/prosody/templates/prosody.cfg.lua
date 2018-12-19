@@ -85,7 +85,7 @@ modules_enabled = {
 
     -- Community modules
         "smacks"; -- XEP-0198: Stream Management
-        "csi"; "filter_chatstates"; "throttle_presence"; -- XEP-0352: Client State Indication
+        "csi_battery_saver"; -- XEP-0352: Client State Indication
         "http_upload"; -- XEP-0363: HTTP File Upload
         "register_web"; -- what it says on the tin
 };
