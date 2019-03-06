@@ -80,4 +80,4 @@ client [\da-fA-F.:]+#\d+( \([\w.-]+\))?: (zone transfer '[\w.-]+/AXFR/IN' denied
 
 _SYSTEMD_UNIT = opendkim.service
 [A-Z0-9]+: (bad signature data|failed to parse [Aa]uthentication-[Rr]esults: header field)
-[A-Z0-9]+: key retrieval failed (s=[\w._-]+, d=[\w._-]+): '[\w._-]+' record not found
+[A-Z0-9]+: key retrieval failed \(s=[\w._-]+, d=[\w._-]+\): '[\w._-]+' record not found
