@@ -9,6 +9,7 @@ Group=nogroup
 Environment=NODE_ENV=production
 ExecStart=/srv/{{etherpad.domain}}/etherpad-lite/bin/run.sh
 Restart=on-failure
+RestartSec=1
 
 [Install]
 WantedBy=multi-user.target
