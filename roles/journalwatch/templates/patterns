@@ -66,6 +66,9 @@ warning: TLS library problem: error:[0-9A-F]+:SSL routines:\w+:(no shared cipher
 {% if journalwatch is defined and journalwatch.postfix_slow | default(False) %}
 warning: psc_cache_update: btree:/var/lib/postfix/[a-z_]+ (update|lookup) average delay is \d\d\d ms
 {% endif %}
+{% if journalwatch is defined and journalwatch.strato_broken | default(False) %}
+warning: dnsblog reply timeout [0-9]+s for [\w._-]+
+{% endif %}
 
 _SYSTEMD_UNIT = dovecot.service
 auth: Warning: auth client \d+ disconnected with \d+ pending requests: (EOF|Connection reset by peer)
