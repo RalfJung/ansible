@@ -137,6 +137,6 @@ non_smtpd_milters = $smtpd_milters
 # misc
 smtpd_delay_reject = yes
 disable_vrfy_command = yes
-recipient_delimiter = +
+recipient_delimiter = +_
 delay_warning_time = 4h
 message_size_limit = 21384000
