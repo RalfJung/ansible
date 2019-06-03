@@ -127,7 +127,7 @@ default_pass_scheme = SSHA
 #user_query = \
 #  SELECT home, uid, gid \
 #  FROM users WHERE username = '%n' AND domain = '%d'
-user_query = SELECT '/var/vmail/%u' as home, 'maildir:/var/vmail/%u' as mail, {{postfix.dovecot.vmail_uid}} AS uid, {{postfix.dovecot.mail_gid}} AS gid FROM users WHERE username = '%u' AND active = '1'
+user_query = SELECT '/var/vmail/%u' as home, 'maildir:~/mail' as mail, {{postfix.dovecot.vmail_uid}} AS uid, {{postfix.dovecot.mail_gid}} AS gid FROM users WHERE username = '%u' AND active = '1'
 
 # If you wish to avoid two SQL lookups (passdb + userdb), you can use
 # userdb prefetch instead of userdb sql in dovecot.conf. In that case you'll
@@ -137,7 +137,7 @@ user_query = SELECT '/var/vmail/%u' as home, 'maildir:/var/vmail/%u' as mail, {{
 #  SELECT userid AS user, password, \
 #    home AS userdb_home, uid AS userdb_uid, gid AS userdb_gid \
 #  FROM users WHERE userid = '%u'
-password_query = SELECT username as user, password, '/var/vmail/%u' as userdb_home, 'maildir:/var/vmail/%u' as userdb_mail, {{postfix.dovecot.vmail_uid}} as userdb_uid, {{postfix.dovecot.mail_gid}} as userdb_gid \
+password_query = SELECT username as user, password, '/var/vmail/%u' as userdb_home, 'maildir:~/mail' as userdb_mail, {{postfix.dovecot.vmail_uid}} as userdb_uid, {{postfix.dovecot.mail_gid}} as userdb_gid \
     FROM users WHERE username = '%u' AND active = '1'
 
 # Query to get a list of all usernames.
