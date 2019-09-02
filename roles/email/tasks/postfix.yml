@@ -45,13 +45,12 @@
   when: virtual_alias_map.changed
   command: postmap /etc/postfix/virtual_alias_map
   notify: postfix
-- name: create empty sender_transport_map
+- name: create sender_transport_map
   when: postfix.smtp_outgoing is defined
   register: sender_transport_map
-  copy:
+  template:
     dest: /etc/postfix/sender_transport_map
-    content: ""
-    force: no
+    src: templates/sender_transport_map
 - name: postmap sender_transport_map
   when: sender_transport_map.changed
   command: postmap /etc/postfix/sender_transport_map

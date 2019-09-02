@@ -51,6 +51,7 @@ postfix:
   # optional: install and configure mailman
   mailman:
     default_host: lists.example.org
+    smtp_outgoing: smtp2
     default_lang: en # if you change this, also run "dpkg-reconfigure mailman" to enable more languages
     domains: # the file /etc/postfix/virtual_alias_map can be used to configure aliases
     - lists.example.org
