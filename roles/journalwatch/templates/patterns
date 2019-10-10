@@ -68,6 +68,7 @@ warning: psc_cache_update: btree:/var/lib/postfix/[a-z_]+ (update|lookup) averag
 {% endif %}
 {% if journalwatch is defined and journalwatch.strato_broken | default(False) %}
 warning: dnsblog reply timeout [0-9]+s for [\w._-]+
+warning: dnsblog_query: lookup error for DNS query .*
 {% endif %}
 
 _SYSTEMD_UNIT = dovecot.service
