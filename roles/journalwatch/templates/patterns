@@ -56,7 +56,10 @@ Failed to set devices.allow on /system.slice/[a-z-]+.service: Operation not perm
 {% endif %}
 
 SYSLOG_IDENTIFIER = sudo
-\s*[_\w.-]+ : TTY=(unknown|console|(pts/|ttyp?|vc/)\d+) ; PWD=[^;]+ ; USER=[._\w-]+ ; COMMAND=.*
+\s*[._\w-]+ : TTY=(unknown|console|(pts/|ttyp?|vc/)\d+) ; PWD=[^;]+ ; USER=[._\w-]+ ; COMMAND=.*
+
+SYSLOG_IDENTIFIER = su
+\(to [._\w-]+\) [._\w-]+ on none
 
 _SYSTEMD_UNIT = postfix@-.service
 warning: hostname [^\s]+ does not resolve to address [\da-fA-F.:]+(: Name or service not known)?
