@@ -4,6 +4,8 @@
   Please edit settings.json, not settings.json.template
 */
 {
+  "skinName": "colibris",
+
   //IP and port which etherpad should bind at
   "ip": "127.0.0.1",
   "port" : 9001,
