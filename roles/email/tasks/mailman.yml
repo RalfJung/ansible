@@ -33,6 +33,7 @@
   - Cgi/listinfo.py
   - Cgi/subscribe.py
   - Captcha.py
+  when: mailman_patched.rc != 0
 - name: install patched templates
   copy:
     dest: /etc/mailman/{{item}}
