@@ -92,5 +92,6 @@ bind:
 etherpad:
   domain: pad.example.org
   default_text: "Welcome to Etherpad!\\n\\nThis pad text is synchronized as you type, so that everyone viewing this page sees the same text. This allows you to collaborate seamlessly on documents!\\n\\nGet involved with Etherpad at http:\/\/etherpad.org\\n"
+  # Also see <https://github.com/ether/etherpad-lite/issues/3959> for some database configuration advice!
   mysql_password: $RANDOM
   admin_password: $RANDOM
