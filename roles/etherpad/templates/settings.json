@@ -17,7 +17,8 @@
                     "user"    : "etherpad",
                     "host"    : "localhost",
                     "password": "{{etherpad.mysql_password}}",
-                    "database": "etherpad"
+                    "database": "etherpad",
+                    "charset" : "utf8mb4"
                   },
 
   //the default text of a pad
