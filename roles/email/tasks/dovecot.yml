@@ -22,7 +22,7 @@
   template:
     dest: /etc/dovecot/{{ item }}
     src: templates/dovecot/{{ item }}
-    mode: u=rw,g=r,o=
+    mode: u=rw,g=r,o=r # changepw needs read access
     group: dovecot
   loop:
   - conf.d/10-auth.conf
@@ -34,6 +34,14 @@
   - conf.d/20-lmtp.conf
   - conf.d/90-quota.conf
   - conf.d/auth-sql.conf.ext
+- name: configure dovecot secrets
+  notify: dovecot
+  template:
+    dest: /etc/dovecot/{{ item }}
+    src: templates/dovecot/{{ item }}
+    mode: u=rw,g=r,o=
+    group: dovecot
+  loop:
   - dovecot-sql.conf.ext
 - name: install quota notification script
   template:
