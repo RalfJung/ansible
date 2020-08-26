@@ -14,5 +14,7 @@ if mlist.generic_nonmember_action == 2:
     print "List",mlist.real_name,"by",(', '.join(mlist.owner)),"is prone to backscatter spam due to reject notifications"
 if mlist.generic_nonmember_action == 1 and mlist.respond_to_post_requests:
     print "List",mlist.real_name,"by",(', '.join(mlist.owner)),"is prone to backscatter spam due to hold notifications"
+if mlist.bounce_unrecognized_goes_to_list_owner:
+    print "List",mlist.real_name,"by",(', '.join(mlist.owner)),"may spam the owner with unrecognized bounce notifications"
 EOF
 done
