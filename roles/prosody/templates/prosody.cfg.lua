@@ -117,7 +117,7 @@ pidfile = "/var/run/prosody/prosody.pid"
 -- to use SSL/TLS, you may comment or remove this
 ssl = {
 	key = "/etc/ssl/private/letsencrypt/live.key";
-	certificate = "/etc/ssl/mycerts/letsencrypt/live.crt+chain";
+	certificate = "/etc/ssl/mycerts/letsencrypt/live.crt";
 	ciphers = "ALL:!EXPORT:!LOW:!MEDIUM:!aNULL:!3DES";
 	dhparam = "/etc/ssl/dh2048.pem";
 }

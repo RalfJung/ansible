@@ -13,7 +13,7 @@ local_recipient_maps = $alias_maps
 
 {% if 'letsencrypt' in group_names %}
 # TLS server parameters
-smtpd_tls_cert_file=/etc/ssl/mycerts/letsencrypt/live.crt+chain
+smtpd_tls_cert_file=/etc/ssl/mycerts/letsencrypt/live.crt
 smtpd_tls_key_file=/etc/ssl/private/letsencrypt/live.key
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 smtpd_tls_security_level = may
