@@ -2,3 +2,5 @@
   service: name=prosody state=restarted enabled=yes
 - name: apache
   service: name=apache2 state=restarted enabled=yes
+- name: coturn
+  service: name=coturn state=restarted enabled=yes

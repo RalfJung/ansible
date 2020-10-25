@@ -1,6 +1,6 @@
 # install
 - name: install prosody
-  apt: name=prosody,lua-zlib,lua-dbi-sqlite3 state=latest default_release={{ansible_distribution_release}}-backports
+  apt: name=prosody,lua-zlib,lua-dbi-sqlite3,coturn state=latest default_release={{ansible_distribution_release}}-backports
 - name: fetch prosody modules
   hg:
     dest: "{{ prosody.paths.modules }}"
@@ -13,6 +13,11 @@
     dest: /etc/prosody/prosody.cfg.lua
     src: templates/prosody.cfg.lua
   notify: prosody
+- name: configure coturn
+  template:
+    dest: /etc/turnserver.conf
+    src: templates/turnserver.conf
+  notify: coturn
 - name: configure apache
   when: inventory_hostname in groups['apache']
   template:
