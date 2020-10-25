@@ -72,7 +72,7 @@ modules_enabled = {
         --"websocket"; -- XMPP over WebSockets
         --"http_files"; -- Serve static files from a directory over HTTP
 
-        -- Other specific functionality
+    -- Other specific functionality
         --"limits"; -- Enable bandwidth limiting for XMPP connections
         --"groups"; -- Shared roster support
         --"server_contact_info"; -- Publish contact information for this service
@@ -82,6 +82,7 @@ modules_enabled = {
         --"motd"; -- Send a message to users when they log in
         --"legacyauth"; -- Legacy authentication. Only used by some old clients and bots.
         --"proxy65"; -- Enables a file transfer proxy service which clients behind NAT can use
+        "external_services"; -- XEP-0215: External Service Discovery
 
     -- Community modules
         "smacks"; -- XEP-0198: Stream Management
@@ -215,6 +216,22 @@ http_default_host = "{{ prosody.host }}"
 http_upload_file_size_limit = 5 * 1024 * 1024
 http_upload_expire_after = 60 * 60 * 24 * 7 -- a week in seconds
 http_upload_quota = 50 * 1024 * 1024
+
+-- Set up external services
+external_services = {
+    {
+        type = "stun",
+        transport = "udp",
+        host = "{{ prosody.host }}",
+        port = 3478
+    }, {
+        type = "turn",
+        transport = "udp",
+        host = "{{ prosody.host }}",
+        port = 3478,
+        secret = "{{ prosody.turn.secret }}"
+    }
+}
 
 ----------- Virtual hosts -----------
 -- You need to add a VirtualHost entry for each domain you wish Prosody to serve.
