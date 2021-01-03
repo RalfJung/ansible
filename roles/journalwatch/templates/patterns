@@ -90,4 +90,4 @@ _SYSTEMD_UNIT = opendkim.service
 [A-Z0-9]+: key retrieval failed \(s=[\w._-]+, d=[\w._-]+\)(: '[\w._-]+' record not found)?
 
 _SYSTEMD_SLICE=system-openvpn.slice
-(client/)?[0-9a-f.:]+ (peer info: .*|VERIFY OK: .*|Data Channel Encrypt: .*|Data Channel Decrypt: .*|Control Channel: .*|TLS: .*|\[client\] .*|MULTI(_sva)?: .*|SIGUSR1.*|PUSH: .*|SENT CONTROL \[client\]: .*)
+(client/)?[0-9a-f.:]+ (peer info: .*|VERIFY OK: .*|Outgoing Data Channel: .*|Incoming Data Channel: .*|Control Channel: .*|TLS: .*|\[client\] .*|MULTI(_sva)?: .*|SIGUSR1.*|PUSH: .*|SENT CONTROL \[client\]: .*)
