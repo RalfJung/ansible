@@ -21,8 +21,8 @@
 - name: check if all the files have the right checksums to be patched
   shell: 'echo "{{item}}" | sha256sum -c'
   loop:
-    - "26b4cbb7c5bde8badf741e31975235e74abb932037d77d862cf00b412726c2c2  /usr/lib/mailman/Mailman/Cgi/listinfo.py"
-    - "cbef3d8cb6b65e4c9b2462f8627966d55dd52caa2e626c87241c4f8d47477dc7  /usr/lib/mailman/Mailman/Cgi/subscribe.py"
+    - "621368ef38d991be46e4537b1d5444276579cd60cc721a749d500dd0b98efe27  /usr/lib/mailman/Mailman/Cgi/listinfo.py"
+    - "c6e46afe1c016d6853c8397916a6f6fd88c6cea71ae890ef3680617f1f8f7c9a  /usr/lib/mailman/Mailman/Cgi/subscribe.py"
   changed_when: False
   when: mailman_patched.rc != 0
 - name: install patched python files

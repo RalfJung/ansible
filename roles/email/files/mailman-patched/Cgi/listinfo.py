@@ -1,4 +1,4 @@
-# Copyright (C) 1998-2016 by the Free Software Foundation, Inc.
+# Copyright (C) 1998-2018 by the Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -38,8 +38,7 @@ _ = i18n._
 i18n.set_language(mm_cfg.DEFAULT_SERVER_LANGUAGE)
 
 
-
-
+
 def main():
     parts = Utils.GetPathPieces()
     if not parts:
@@ -61,7 +60,7 @@ def main():
     # See if the user want to see this page in other language
     cgidata = cgi.FieldStorage()
     try:
-        language = cgidata.getvalue('language')
+        language = cgidata.getfirst('language')
     except TypeError:
         # Someone crafted a POST with a bad Content-Type:.
         doc = Document()
@@ -79,8 +78,7 @@ def main():
     list_listinfo(mlist, language)
 
 
-
-
+
 def listinfo_overview(msg=''):
     # Present the general listinfo overview
     hostname = Utils.get_domain()
@@ -117,7 +115,7 @@ def listinfo_overview(msg=''):
             else:
                 advertised.append((mlist.GetScriptURL('listinfo'),
                                    mlist.real_name,
-                                   Utils.websafe(mlist.description)))
+                                   Utils.websafe(mlist.GetDescription())))
     if msg:
         greeting = FontAttr(msg, color="ff5060", size="+1")
     else:
@@ -175,8 +173,7 @@ def listinfo_overview(msg=''):
     print doc.Format()
 
 
-
-
+
 def list_listinfo(mlist, lang):
     # Generate list specific listinfo
     doc = HeadlessDocument()
@@ -227,10 +224,10 @@ def list_listinfo(mlist, lang):
         # fill form
         replacements['<mm-subscribe-form-start>'] += (
                 '<input type="hidden" name="sub_form_token" value="%s:%s:%s">\n'
-                % (now, captcha_idx, Utils.sha_new(mm_cfg.SUBSCRIBE_FORM_SECRET +
-                          now +
-                          captcha_idx +
-                          mlist.internal_name() +
+                % (now, captcha_idx, Utils.sha_new(mm_cfg.SUBSCRIBE_FORM_SECRET + ":" +
+                          now + ":" +
+                          captcha_idx + ":" +
+                          mlist.internal_name() + ":" +
                           remote
                           ).hexdigest()
                     )
@@ -253,13 +250,25 @@ def list_listinfo(mlist, lang):
     replacements['<mm-displang-box>'] = displang
     replacements['<mm-lang-form-start>'] = mlist.FormatFormStart('listinfo')
     replacements['<mm-fullname-box>'] = mlist.FormatBox('fullname', size=30)
+    # If reCAPTCHA is enabled, display its user interface
+    if mm_cfg.RECAPTCHA_SITE_KEY:
+        noscript = _('This form requires JavaScript.')
+        replacements['<mm-recaptcha-ui>'] = (
+            """<tr><td>&nbsp;</td><td>
+            <noscript>%s</noscript>
+            <script src="https://www.google.com/recaptcha/api.js?hl=%s">
+            </script>
+            <div class="g-recaptcha" data-sitekey="%s"></div>
+            </td></tr>"""
+            % (noscript, lang, mm_cfg.RECAPTCHA_SITE_KEY))
+    else:
+        replacements['<mm-recaptcha-ui>'] = ''
 
     # Do the expansion.
     doc.AddItem(mlist.ParseTags('listinfo.html', replacements, lang))
     print doc.Format()
 
 
-
-
+
 if __name__ == "__main__":
     main()

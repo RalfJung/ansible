@@ -1,4 +1,4 @@
-# Copyright (C) 1998-2016 by the Free Software Foundation, Inc.
+# Copyright (C) 1998-2018 by the Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,6 +22,9 @@ import os
 import cgi
 import time
 import signal
+import urllib
+import urllib2
+import json
 
 from Mailman import mm_cfg
 from Mailman import Utils
@@ -36,14 +39,14 @@ from Mailman.Logging.Syslog import syslog
 
 SLASH = '/'
 ERRORSEP = '\n\n<p>'
+COMMASPACE = ', '
 
 # Set up i18n
 _ = i18n._
 i18n.set_language(mm_cfg.DEFAULT_SERVER_LANGUAGE)
 
 
-
-
+
 def main():
     doc = Document()
     doc.set_language(mm_cfg.DEFAULT_SERVER_LANGUAGE)
@@ -73,7 +76,7 @@ def main():
     # for the results.  If not, use the list's preferred language.
     cgidata = cgi.FieldStorage()
     try:
-        language = cgidata.getvalue('language', '')
+        language = cgidata.getfirst('language', '')
     except TypeError:
         # Someone crafted a POST with a bad Content-Type:.
         doc.AddItem(Header(2, _("Error")))
@@ -114,19 +117,18 @@ def main():
         mlist.Unlock()
 
 
-
-
+
 def process_form(mlist, doc, cgidata, lang):
     listowner = mlist.GetOwnerEmail()
     realname = mlist.real_name
     results = []
 
     # The email address being subscribed, required
-    email = cgidata.getvalue('email', '').strip()
+    email = cgidata.getfirst('email', '').strip()
     if not email:
         results.append(_('You must supply a valid email address.'))
 
-    fullname = cgidata.getvalue('fullname', '')
+    fullname = cgidata.getfirst('fullname', '')
     # Canonicalize the full name
     fullname = Utils.canonstr(fullname, lang)
     # Who was doing the subscribing?
@@ -134,6 +136,26 @@ def process_form(mlist, doc, cgidata, lang):
              os.environ.get('HTTP_X_FORWARDED_FOR',
              os.environ.get('REMOTE_ADDR',
                             'unidentified origin')))
+
+    # Check reCAPTCHA submission, if enabled
+    if mm_cfg.RECAPTCHA_SECRET_KEY:
+        request = urllib2.Request(
+            url = 'https://www.google.com/recaptcha/api/siteverify',
+            data = urllib.urlencode({
+                'secret': mm_cfg.RECAPTCHA_SECRET_KEY,
+                'response': cgidata.getvalue('g-recaptcha-response', ''),
+                'remoteip': remote}))
+        try:
+            httpresp = urllib2.urlopen(request)
+            captcha_response = json.load(httpresp)
+            httpresp.close()
+            if not captcha_response['success']:
+                e_codes = COMMASPACE.join(captcha_response['error-codes'])
+                results.append(_('reCAPTCHA validation failed: %(e_codes)s'))
+        except urllib2.URLError, e:
+            e_reason = e.reason
+            results.append(_('reCAPTCHA could not be validated: %(e_reason)s'))
+
     # Are we checking the hidden data?
     if mm_cfg.SUBSCRIBE_FORM_SECRET:
         now = int(time.time())
@@ -147,15 +169,15 @@ def process_form(mlist, doc, cgidata, lang):
             #        for our hash so it doesn't matter.
             remote1 = remote.rsplit(':', 1)[0]
         try:
-            ftime, fcaptcha_idx, fhash = cgidata.getvalue('sub_form_token', '').split(':')
+            ftime, fcaptcha_idx, fhash = cgidata.getfirst('sub_form_token', '').split(':')
             then = int(ftime)
         except ValueError:
             ftime = fcaptcha_idx = fhash = ''
             then = 0
-        token = Utils.sha_new(mm_cfg.SUBSCRIBE_FORM_SECRET +
-                              ftime +
-                              fcaptcha_idx +
-                              mlist.internal_name() +
+        token = Utils.sha_new(mm_cfg.SUBSCRIBE_FORM_SECRET + ":" +
+                              ftime + ":" +
+                              fcaptcha_idx + ":" +
+                              mlist.internal_name() + ":" +
                               remote1).hexdigest()
         if ftime and now - then > mm_cfg.FORM_LIFETIME:
             results.append(_('The form is too old.  Please GET it again.'))
@@ -169,17 +191,17 @@ def process_form(mlist, doc, cgidata, lang):
             results.append(
     _('There was no hidden token in your submission or it was corrupted.'))
             results.append(_('You must GET the form before submitting it.'))
-        # Check captcha
-        captcha_answer = cgidata.getvalue('captcha_answer', '')
-        if not Captcha.verify(fcaptcha_idx, captcha_answer, mm_cfg.CAPTCHAS):
-            results.append(_('This was not the right answer to the CAPTCHA question.'))
+    # Check captcha
+    captcha_answer = cgidata.getvalue('captcha_answer', '')
+    if not Captcha.verify(fcaptcha_idx, captcha_answer, mm_cfg.CAPTCHAS):
+        results.append(_('This was not the right answer to the CAPTCHA question.'))
     # Was an attempt made to subscribe the list to itself?
     if email == mlist.GetListEmail():
         syslog('mischief', 'Attempt to self subscribe %s: %s', email, remote)
         results.append(_('You may not subscribe a list to itself!'))
     # If the user did not supply a password, generate one for him
-    password = cgidata.getvalue('pw', '').strip()
-    confirmed = cgidata.getvalue('pw-conf', '').strip()
+    password = cgidata.getfirst('pw', '').strip()
+    confirmed = cgidata.getfirst('pw-conf', '').strip()
 
     if not password and not confirmed:
         password = Utils.MakeRandomPassword()
@@ -189,11 +211,11 @@ def process_form(mlist, doc, cgidata, lang):
         results.append(_('Your passwords did not match.'))
 
     # Get the digest option for the subscription.
-    digestflag = cgidata.getvalue('digest')
+    digestflag = cgidata.getfirst('digest')
     if digestflag:
         try:
             digest = int(digestflag)
-        except ValueError:
+        except (TypeError, ValueError):
             digest = 0
     else:
         digest = mlist.digest_is_default
@@ -318,8 +340,7 @@ You have been successfully subscribed to the %(realname)s mailing list.""")
     print_results(mlist, results, doc, lang)
 
 
-
-
+
 def print_results(mlist, results, doc, lang):
     # The bulk of the document will come from the options.html template, which
     # includes its own html armor (head tags, etc.).  Suppress the head that
