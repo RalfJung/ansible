@@ -13,6 +13,7 @@
   loop:
   - main.cf
   - master.cf
+  - postscreen_access.cidr
   notify: postfix
 - name: install postfix mysql config
   when: postfix.dovecot is defined
