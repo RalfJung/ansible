@@ -1,4 +1,3 @@
 *.retry
 hosts
 host_vars
-hosts
