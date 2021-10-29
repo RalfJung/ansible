@@ -1,2 +1,4 @@
 # Google thinks they are better than everyone else, and don't need to be compatible with greylisting.
 209.85.128.0/17 permit
+# Same for Microsoft.
+52.96.0.0/12 permit
