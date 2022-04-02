@@ -62,7 +62,7 @@ SYSLOG_IDENTIFIER = su
 \(to [._\w-]+\) [._\w-]+ on none
 
 _SYSTEMD_UNIT = postfix@-.service
-warning: hostname [^\s]+ does not resolve to address [\da-fA-F.:]+(: Name or service not known)?
+warning: hostname [\w._-]+ does not resolve to address [\da-fA-F.:]+(: .*)?
 warning: [._\w-]+\[[\da-fA-F.:]+\]: SASL (LOGIN|PLAIN) authentication failed:.*
 warning: non-SMTP command from [._\w-]+\[[\da-fA-F.:]+\]: .*
 warning: TLS library problem: error:[0-9A-F]+:SSL routines:\w+:(no shared cipher|decryption failed or bad record mac|unknown protocol|version too low):[\w./]+:\d+:
