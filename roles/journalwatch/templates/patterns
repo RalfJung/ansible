@@ -76,6 +76,7 @@ warning: dnsblog_query: lookup error for DNS query .*
 
 _SYSTEMD_UNIT = dovecot.service
 auth: Warning: auth client \d+ disconnected with \d+ pending requests: (EOF|Connection reset by peer)
+auth: Warning: Event 0x[\da-fA-F]+ leaked \(parent=\(nil\)\): auth-client-connection.c:\d+
 
 SYSLOG_IDENTIFIER = sshd
 error: Received disconnect from [\da-fA-F.:]+ port \d+:\d+: .*
