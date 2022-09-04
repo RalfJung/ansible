@@ -49,6 +49,7 @@ postscreen_non_smtp_command_enable = yes
 postscreen_bare_newline_enable = yes
 postscreen_access_list = permit_mynetworks,
 	cidr:$config_directory/postscreen_access.cidr
+postscreen_blacklist_action = enforce
 {% endif %}
 
 # control relay access

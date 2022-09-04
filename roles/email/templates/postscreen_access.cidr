@@ -5,3 +5,6 @@
 40.104.0.0/15 permit
 52.96.0.0/14 permit
 2603:1000::/24 permit
+
+# Some hosts that send bounces to the wrong guy (i.e., me)
+153.122.0.0/15 reject please check your config, you are sending bounce spam
