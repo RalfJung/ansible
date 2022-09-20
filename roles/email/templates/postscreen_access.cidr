@@ -7,6 +7,7 @@
 2603:1000::/24 permit
 
 # Some hosts that send bounces to the wrong guy (i.e., me)
-153.122.0.0/15 reject please check mail server config, you are sending bounce spam
-153.121.32.0/19 reject please check mail server config, you are sending bounce spam
-192.241.146.138 reject please check mail server config, you are sending bounce spam
+153.122.0.0/15 reject please check mail server config, your server is sending bounce spam
+153.121.32.0/19 reject please check mail server config, your server is sending bounce spam
+192.241.146.138 reject please check mail server config, your server is sending bounce spam
+209.97.143.86 reject please check mail server config, your server is sending bounce spam
