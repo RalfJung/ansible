@@ -142,4 +142,4 @@ smtpd_delay_reject = yes
 disable_vrfy_command = yes
 recipient_delimiter = {{ postfix.recipient_delimiter | default("+") }}
 delay_warning_time = 4h
-message_size_limit = 21384000
+message_size_limit = 30100100
