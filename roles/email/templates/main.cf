@@ -36,7 +36,7 @@ smtp_tls_security_level = dane
 
 {% if postfix.postscreen | default(False) %}
 # postscreen config
-postscreen_dnsbl_threshold = 2
+postscreen_dnsbl_threshold = 3
 postscreen_dnsbl_whitelist_threshold = -2
 postscreen_dnsbl_sites =
 	ix.dnsbl.manitu.net*2 sbl-xbl.spamhaus.org*2 truncate.gbudb.net*2
