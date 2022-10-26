@@ -66,6 +66,8 @@ warning: hostname [\w._-]+ does not resolve to address [\da-fA-F.:]+(: .*)?
 warning: [._\w-]+\[[\da-fA-F.:]+\]: SASL (LOGIN|PLAIN) authentication failed:.*
 warning: non-SMTP command from [._\w-]+\[[\da-fA-F.:]+\]: .*
 warning: TLS library problem: error:[0-9A-F]+:SSL routines:\w+:(no shared cipher|decryption failed or bad record mac|unknown protocol|version too low):[\w./]+:\d+:
+warning: dnsblog reply timeout \d+s for .*
+warning: dnsblog_query: lookup error for DNS query .*: Host or domain name not found. Name service error .*
 {% if journalwatch is defined and journalwatch.postfix_slow | default(False) %}
 warning: psc_cache_update: btree:/var/lib/postfix/[a-z_]+ (update|lookup) average delay is \d\d\d ms
 {% endif %}
@@ -84,11 +86,11 @@ error: maximum authentication attempts exceeded for (invalid user \w*|\w+) from 
 fatal: ssh_packet_get_string: string is too large \[preauth\]
 
 _SYSTEMD_UNIT = bind9.service
-client [\da-fA-F.:]+#\d+( \([\w.-]+\))?: (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type|unexpected end of input))
+client (@0x[a-f0-9]+ )?[\da-fA-F.:]+#\d+( \([\w.-]+\))?: (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type|unexpected end of input))
 
 _SYSTEMD_UNIT = opendkim.service
 [A-Z0-9]+: (bad signature data|failed to parse [Aa]uthentication-[Rr]esults: header field)
 [A-Z0-9]+: key retrieval failed \(s=[\w._-]+, d=[\w._-]+\)(: '[\w._-]+' record not found)?
 
 _SYSTEMD_SLICE=system-openvpn.slice
-(client/)?[0-9a-f.:]+ (peer info: .*|VERIFY OK: .*|Outgoing Data Channel: .*|Incoming Data Channel: .*|Control Channel: .*|TLS: .*|\[client\] .*|MULTI(_sva)?: .*|SIGUSR1.*|PUSH: .*|SENT CONTROL \[client\]: .*|WARNING: 'tun-mtu' is used inconsistently, local='tun-mtu \d+', remote='tun-mtu \d+')
+(client/)?[0-9a-f.:]+ (peer info: .*|VERIFY OK: .*|Outgoing Data Channel: .*|Incoming Data Channel: .*|Control Channel: .*|TLS: .*|\[client\] .*|MULTI(_sva)?: .*|SIGUSR1.*|PUSH: .*|SENT CONTROL \[client\]: .*|WARNING: '(tun|link)-mtu' is used inconsistently, local='(tun|link)-mtu \d+', remote='(tun|link)-mtu \d+')
