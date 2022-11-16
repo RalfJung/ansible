@@ -5,6 +5,9 @@
 40.104.0.0/15 permit
 52.96.0.0/14 permit
 2603:1000::/24 permit
+# And Sparkpost.
+156.70.4.0/23 permit
+156.70.2.0/23 permit
 
 # Some hosts that send bounces to the wrong guy (i.e., me)
 192.241.146.138 reject please check mail server config, your server is sending bounce spam
