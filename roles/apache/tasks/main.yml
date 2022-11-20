@@ -35,6 +35,7 @@
   - php5.conf
   - security.conf
   - defaults.conf
+  - caching.conf
   notify: apache
 - name: enable config files
   command: a2enconf {{ item }}
@@ -44,6 +45,7 @@
   - ssl
   - security
   - defaults
+  - caching
   notify: apache
 - name: disable config files
   command: a2disconf {{ item }}
