@@ -2,9 +2,9 @@
 set -e
 
 # Fix for some providers messing with DNS settings
-if ! diff /etc/resolv.conf <(echo "nameserver 127.0.0.2") > /dev/null; then
+if ! diff /etc/resolv.conf /etc/resolv.conf.unbound > /dev/null; then
 	echo "Someone messed up our DNS! Fixing it..."
-	echo "nameserver 127.0.0.2" > /etc/resolv.conf
+	cp /etc/resolv.conf.unbound /etc/resolv.conf
 {% if 'email' in group_names %}
 	# Just to make sure postfix uses the new settings
 	systemctl restart postfix

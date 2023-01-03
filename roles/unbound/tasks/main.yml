@@ -32,8 +32,11 @@
     src: files/dhclient.conf
 - name: configure system DNS
   copy:
-    dest: /etc/resolv.conf
-    content: "nameserver 127.0.0.2\n"
+    dest: "{{ item }}"
+    content: "nameserver 127.0.0.2\noptions trust-ad\noptions edns0\n"
+  loop:
+  - /etc/resolv.conf.unbound
+  - /etc/resolv.conf
 # some providers need extra hacks to make our DNS persistent
 - name: install DNS-fix cronjob
   template:
