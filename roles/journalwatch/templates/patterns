@@ -51,6 +51,7 @@ Failed to allocate manager object: Permission denied
 
 _SYSTEMD_UNIT = init.scope
 user@\d+\.service: Killing process \d+ \(kill\) with signal SIGKILL\.
+[^: ]+: Consumed [\d.]+s CPU time\.
 {% if journalwatch is defined and journalwatch.strato_broken | default(False) %}
 Failed to set devices.allow on /system.slice/[a-z-]+.service: Operation not permitted
 {% endif %}
