@@ -1,5 +1,5 @@
 - name: install dovecot
-  apt: name=dovecot-imapd,dovecot-lmtpd,dovecot-mysql,dovecot-pop3d,dovecot-sieve,dovecot-managesieved state=latest
+  apt: name=dovecot-imapd,dovecot-lmtpd,dovecot-mysql,dovecot-pop3d,dovecot-sieve,dovecot-managesieved,python3-mysqldb state=latest
 - name: enable dovecot
   service: name=dovecot enabled=yes
 # configuration

@@ -1,5 +1,5 @@
 - name: install apache
-  apt: name=apache2,python-netaddr state=latest
+  apt: name=apache2,python3-netaddr state=latest
 - name: enable apache
   service: name=apache2 enabled=yes
 # apache config
