@@ -20,7 +20,6 @@
   become_user: opendkim
   args:
     creates: /etc/opendkim/{{ item }}/mail.private
-    warn: False
   loop: "{{ postfix.opendkim.private_keys }}"
 - name: generate opendkim tables
   template:
