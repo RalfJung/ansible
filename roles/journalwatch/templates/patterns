@@ -86,7 +86,7 @@ SYSLOG_IDENTIFIER = sshd
 error: Received disconnect from [\da-fA-F.:]+ port \d+:\d+: .*
 error: maximum authentication attempts exceeded for (invalid user \w*|\w+) from [\da-fA-F.:]+ port \d+ ssh2 \[preauth\]
 fatal: ssh_packet_get_string: string is too large \[preauth\]
-error: kex_exchange_identification: .*
+error: (kex_exchange_identification|send_error|kex protocol error|Bad remote protocol version identification|Protocol major versions differ|beginning MaxStartups throttling).*
 
 _SYSTEMD_UNIT = named.service
 client (@0x[a-f0-9]+ )?[\da-fA-F.:]+#\d+( \([\w.-]+\))?: (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type|unexpected end of input))
