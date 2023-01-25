@@ -84,7 +84,7 @@ auth: Warning: Event 0x[\da-fA-F]+ leaked \(parent=\(nil\)\): auth-client-connec
 
 SYSLOG_IDENTIFIER = sshd
 error: Received disconnect from [\da-fA-F.:]+ port \d+:\d+: .*
-error: maximum authentication attempts exceeded for (invalid user \w*|\w+) from [\da-fA-F.:]+ port \d+ ssh2 \[preauth\]
+error: maximum authentication attempts exceeded for (invalid user [\w_-]*|[\w_-]+) from [\da-fA-F.:]+ port \d+ ssh2 \[preauth\]
 fatal: ssh_packet_get_string: string is too large \[preauth\]
 error: (kex_exchange_identification|send_error|kex protocol error|Bad remote protocol version identification|Protocol major versions differ|beginning MaxStartups throttling).*
 
