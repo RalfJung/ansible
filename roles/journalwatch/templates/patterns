@@ -85,15 +85,16 @@ auth: Warning: Event 0x[\da-fA-F]+ leaked \(parent=\(nil\)\): auth-client-connec
 SYSLOG_IDENTIFIER = sshd
 error: Received disconnect from [\da-fA-F.:]+ port \d+:\d+: .*
 error: maximum authentication attempts exceeded for (invalid user [\w_-]*|[\w_-]+) from [\da-fA-F.:]+ port \d+ ssh2 \[preauth\]
-fatal: ssh_packet_get_string: string is too large \[preauth\]
 error: (kex_exchange_identification|send_error|kex protocol error|Bad remote protocol version identification|Protocol major versions differ|beginning MaxStartups throttling).*
+fatal: ssh_packet_get_string: string is too large \[preauth\]
+fatal: userauth_pubkey: parse request failed: incomplete message \[preauth\]
 
 _SYSTEMD_UNIT = named.service
 client (@0x[a-f0-9]+ )?[\da-fA-F.:]+#\d+( \([\w.-]+\))?: (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type|unexpected end of input))
 
 _SYSTEMD_UNIT = opendkim.service
 [A-Z0-9]+: (bad signature data|failed to parse [Aa]uthentication-[Rr]esults: header field)
-[A-Z0-9]+: key retrieval failed \(s=[\w._-]+, d=[\w._-]+\)(: '[\w._-]+' record not found)?
+[A-Z0-9]+: key retrieval failed \(s=[\w._-]+, d=[\w._-]+\)(: '[\w._-]+' (record not found|query timed out))?
 
 _SYSTEMD_SLICE=system-openvpn.slice
 (client/)?[0-9a-f.:]+ (peer info: .*|VERIFY OK: .*|Outgoing Data Channel: .*|Incoming Data Channel: .*|Control Channel: .*|TLS: .*|\[client\] .*|MULTI(_sva)?: .*|SIGUSR1.*|PUSH: .*|SENT CONTROL \[client\]: .*|WARNING: '(tun|link)-mtu' is used inconsistently, local='(tun|link)-mtu \d+', remote='(tun|link)-mtu \d+')
