@@ -99,3 +99,6 @@ _SYSTEMD_UNIT = opendkim.service
 
 _SYSTEMD_SLICE=system-openvpn.slice
 (client/)?[0-9a-f.:]+ (peer info: .*|VERIFY OK: .*|Outgoing Data Channel: .*|Incoming Data Channel: .*|Control Channel: .*|TLS: .*|\[client\] .*|MULTI(_sva)?: .*|SIGUSR1.*|PUSH: .*|SENT CONTROL \[client\]: .*|WARNING: '(tun|link)-mtu' is used inconsistently, local='(tun|link)-mtu \d+', remote='(tun|link)-mtu \d+')
+
+SYSLOG_IDENTIFIER = kernel
+xfs filesystem being remounted at /run/schroot/mount/schsh-[^ ]* supports timestamps until 2038 (0x7fffffff)
