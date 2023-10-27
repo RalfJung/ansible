@@ -1,7 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 PERCENT=$1
+USER=$2
 FROM="{{postfix.postmaster}}"
 
 msg="From: $FROM
@@ -14,6 +15,6 @@ Dein Posteingang ist zu $PERCENT% voll. Bitte räume etwas auf!
 
 Your mailbox is now $PERCENT% full. Please clean it up a bit!"
 
-echo -e "$msg" | /usr/sbin/sendmail -f "$FROM" "$USER" "$FROM"
+echo "$msg" | /usr/sbin/sendmail -f "$FROM" "$USER" "$FROM"
 
 exit 0
