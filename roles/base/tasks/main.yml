@@ -13,7 +13,7 @@
 - name: get rid of packages we do not want
   apt: name=exim4-base,rpcbind,procmail,fetchmail state=absent autoremove=yes
 - name: install some basic tools
-  apt: name=nano,aptitude,rsync,git,mercurial,curl,apt-transport-https,psmisc,dnsutils,tree,htop,acl,libpam-systemd,needrestart,debian-security-support state=latest
+  apt: name=nano,aptitude,rsync,git,mercurial,curl,apt-transport-https,psmisc,dnsutils,tree,htop,acl,libpam-systemd,needrestart,reboot-notifier,debian-security-support state=latest
 # configuration
 - name: configure root shell
   copy:
