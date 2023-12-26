@@ -70,6 +70,7 @@ warning: TLS library problem: error:[0-9A-F]+:SSL routines:\w+:(no shared cipher
 warning: dnsblog reply timeout \d+s for .*
 warning: dnsblog_query: lookup error for DNS query .*: Host or domain name not found. Name service error .*
 warning: ciphertext read/write timeout for \[[\da-fA-F.:]+\]:\d+
+warning: getpeername: Transport endpoint is not connected -- dropping this connection
 {% if journalwatch is defined and journalwatch.postfix_slow | default(False) %}
 warning: psc_cache_update: btree:/var/lib/postfix/[a-z_]+ (update|lookup) average delay is \d\d\d ms
 {% endif %}
@@ -89,6 +90,7 @@ error: (kex_exchange_identification|send_error|kex_protocol_error|kex protocol e
 fatal: ssh_packet_get_string: string is too large \[preauth\]
 fatal: userauth_pubkey: parse request failed: incomplete message \[preauth\]
 error: userauth_pubkey: could not parse key: Invalid key length \[preauth\]
+fatal: monitor_read: unpermitted request .*
 
 _SYSTEMD_UNIT = named.service
 client (@0x[a-f0-9]+ )?[\da-fA-F.:]+#\d+( \([\w.-]+\))?: (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type|unexpected end of input))
