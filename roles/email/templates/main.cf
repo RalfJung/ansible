@@ -65,6 +65,11 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_tls_clientcerts,
     reject_non_fqdn_recipient,
     reject_non_fqdn_sender,
 
+# SMTP smuggling protection
+# <https://www.postfix.org/smtp-smuggling.html>
+smtpd_data_restrictions = reject_unauth_pipelining
+smtpd_discard_ehlo_keywords = chunking
+
 {% if postfix.relay_host is defined %}
 # Relay everything
 default_transport = smtp:{{ postfix.relay_host }}
