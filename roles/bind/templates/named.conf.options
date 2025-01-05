@@ -8,7 +8,6 @@ options {
 	key-directory "/var/lib/bind/keys";
 
 	recursion no;
-	dnssec-enable yes;
 	sig-validity-interval 14;
 
 	auth-nxdomain no;    # conform to RFC1035
