@@ -15,7 +15,7 @@
    "dbType" : "mysql",
    "dbSettings" : {
                     "user"    : "etherpad",
-                    "host"    : "localhost",
+                    "host"    : "127.0.0.1",
                     "password": "{{etherpad.mysql_password}}",
                     "database": "etherpad",
                     "charset" : "utf8mb4"
