@@ -66,7 +66,7 @@ _SYSTEMD_UNIT = postfix@-.service
 warning: hostname [\w._-]+ does not resolve to address [\da-fA-F.:]+(: .*)?
 warning: [._\w-]+\[[\da-fA-F.:]+\]: SASL (LOGIN|PLAIN) authentication failed:.*
 warning: non-SMTP command from [._\w-]+\[[\da-fA-F.:]+\]: .*
-warning: TLS library problem: error:[0-9A-F]+:SSL routines:\w+:.*
+warning: TLS library problem: error:[0-9A-F]+:SSL routines:\w*:.*
 warning: dnsblog reply timeout \d+s for .*
 warning: dnsblog_query: lookup error for DNS query .*: Host or domain name not found. Name service error .*
 warning: ciphertext read/write timeout for \[[\da-fA-F.:]+\]:\d+
