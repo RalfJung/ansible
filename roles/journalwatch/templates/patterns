@@ -89,7 +89,7 @@ error: Received disconnect from [\da-fA-F.:]+ port \d+:\d+: .*
 error: maximum authentication attempts exceeded for (invalid user [\w_-]*|[\w_-]+) from [\da-fA-F.:]+ port \d+ ssh2 \[preauth\]
 error: (kex_exchange_identification|send_error|kex_protocol_error|kex protocol error|Bad remote protocol version identification|Protocol major versions differ|beginning MaxStartups throttling).*
 fatal: ssh_packet_get_string: string is too large \[preauth\]
-(error|fatal): userauth_pubkey: (parse request failed:|could not parse key:|cannot decode key:) .*
+(error|fatal): userauth_pubkey: (parse request failed:|could not parse key:|cannot decode key:|parse publickey packet:) .*
 fatal: monitor_read: unpermitted request .*
 error: key_from_blob: invalid format \[preauth\]
 
