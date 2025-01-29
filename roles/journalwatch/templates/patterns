@@ -81,7 +81,7 @@ warning: dnsblog_query: lookup error for DNS query .*
 {% endif %}
 
 _SYSTEMD_UNIT = dovecot.service
-auth: Warning: auth client \d+ disconnected with \d+ pending requests: (EOF|Connection reset by peer)
+auth: (Error|Warning): auth client \d+ disconnected with \d+ pending requests: (EOF|Connection reset by peer)
 auth: Warning: Event 0x[\da-fA-F]+ leaked \(parent=\(nil\)\): auth-client-connection.c:\d+
 
 SYSLOG_IDENTIFIER = sshd
@@ -92,7 +92,6 @@ fatal: ssh_packet_get_string: string is too large \[preauth\]
 (error|fatal): userauth_pubkey: (parse request failed:|could not parse key:|cannot decode key:|parse publickey packet:) .*
 fatal: monitor_read: unpermitted request .*
 error: key_from_blob: invalid format \[preauth\]
-auth: Error: auth client [0-9]+ disconnected with [0-9]+ pending requests: .*
 
 _SYSTEMD_UNIT = named.service
 client (@0x[a-f0-9]+ )?[\da-fA-F.:]+#\d+( \([\w.-]+\))?: (zone transfer '[\w.-]+/AXFR/IN' denied|message parsing failed: (bad compression pointer|bad label type|unexpected end of input))
